@@ -2,6 +2,7 @@
 #'
 #' `grid.pattern()` draws patterned shapes onto the graphic device.
 #' `patternGrob()` returns the grid grob objects.
+#' `names_pattern` is a character vector of builtin patterns.
 #'
 #' Here is a list of the various patterns supported:
 #'
@@ -12,7 +13,7 @@
 #'               See [grid.pattern_circle()] for more information.}
 #' \item{crosshatch}{Crosshatch geometry patterns.
 #'                   See [grid.pattern_crosshatch()] for more information.}
-#' \item{gradient}{Gradient array patterns.
+#' \item{gradient}{Gradient array/geometry patterns.
 #'                 See [grid.pattern_gradient()] for more information.}
 #' \item{image}{Image array patterns.
 #'              See [grid.pattern_image()] for more information.}
@@ -32,6 +33,10 @@
 #'                        See [grid.pattern_regular_polygon()] for more information.}
 #' \item{stripe}{Stripe geometry patterns.
 #'               See [grid.pattern_stripe()] for more information.}
+#' \item{text}{Text array/geometry patterns.
+#'             See [grid.pattern_text()] for more information.}
+#' \item{wave}{Wave geometry patterns.
+#'               See [grid.pattern_wave()] for more information.}
 #' \item{weave}{Weave geometry patterns.
 #'               See [grid.pattern_weave()] for more information.}
 #' \item{Custom geometry-based patterns}{See \url{https://coolbutuseless.github.io/package/ggpattern/articles/developing-patterns-2.html} for more information.}
@@ -53,6 +58,7 @@
 #' @return A grid grob object (invisibly in the case of `grid.pattern()`).
 #'         If `draw` is `TRUE` then `grid.pattern()` also draws to the graphic device as a side effect.
 #' @examples
+#'  print(names_pattern)
 #'  if (require("grid")) {
 #'    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
@@ -114,6 +120,12 @@ grid.pattern <- function(pattern = "stripe",
 
 #' @rdname grid.pattern
 #' @export
+names_pattern <- c("ambient", "circle", "crosshatch", "gradient", "image",
+                   "magick", "none", "pch", "placeholder", "plasma", "polygon_tiling",
+                   "regular_polygon", "rose", "stripe", "text", "wave", "weave")
+
+#' @rdname grid.pattern
+#' @export
 patternGrob <- function(pattern = "stripe",
                         x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                         legend = FALSE, prefix = "pattern_",
@@ -132,45 +144,104 @@ makeContent.pattern <- function(x) {
     current_dev <- grDevices::dev.cur()
     on.exit(grDevices::dev.set(current_dev))
 
-    xp <- as.numeric(convertX(x$x, "npc"))
-    yp <- as.numeric(convertY(x$y, "npc"))
+    xp <- convertX(x$x, "npc", valueOnly = TRUE)
+    yp <- convertY(x$y, "npc", valueOnly = TRUE)
     id <- x$id
     boundary_df <- create_polygon_df(xp, yp, id)
 
     if (!is.na(x$params$pattern_aspect_ratio)) {
         aspect_ratio <- x$params$pattern_aspect_ratio
     } else {
-        width <- as.numeric(convertWidth(unit(1, "npc"), "in"))
-        height <- as.numeric(convertHeight(unit(1, "npc"), "in"))
+        width <- convertWidth(unit(1, "npc"), "in", valueOnly = TRUE)
+        height <- convertHeight(unit(1, "npc"), "in", valueOnly = TRUE)
         aspect_ratio <-  width / height
     }
 
+    # needs to be called within active graphics device to guess R4.1 capabilities
+    params <- get_R4.1_params(x$params)
+
     fn <- get_pattern_fn(x$pattern)
-    grob <- fn(x$params, boundary_df, aspect_ratio, x$legend)
+    grob <- fn(params, boundary_df, aspect_ratio, x$legend)
     gl <- gList(grob)
     setChildren(x, gl)
 }
 
 get_pattern_fn <- function(pattern) {
+    user_geometry_fns <- getOption("ggpattern_geometry_funcs")
+    user_array_fns <- getOption("ggpattern_array_funcs")
+    assert_patterns_unique(user_geometry_fns, user_array_fns)
     geometry_fns <- c(list(circle = create_pattern_circle_via_sf,
                            crosshatch = create_pattern_crosshatch_via_sf,
+                           gradient = create_pattern_gradient,
                            none = create_pattern_none,
                            pch = create_pattern_pch,
                            polygon_tiling = create_pattern_polygon_tiling,
                            regular_polygon = create_pattern_regular_polygon_via_sf,
+                           rose = create_pattern_rose,
                            stripe = create_pattern_stripes_via_sf,
+                           text = create_pattern_text,
+                           wave = create_pattern_wave_via_sf,
                            weave = create_pattern_weave_via_sf),
-                      getOption("ggpattern_geometry_funcs"))
+                      user_geometry_fns)
     array_fns <- c(list(ambient = create_pattern_ambient,
-                        gradient = create_gradient_as_array,
                         image = img_read_as_array_wrapper,
                         magick = create_magick_pattern_as_array,
                         placeholder = fetch_placeholder_array,
                         plasma = create_magick_plasma_as_array),
-                   getOption("ggpattern_array_funcs"))
+                   user_array_fns)
     array_fns <- lapply(array_fns, function(fn) {
                             function(...) create_pattern_array(..., array_fn=fn)
                    })
     fns <- c(geometry_fns, array_fns)
     fns[[pattern]] %||% abort(paste("Don't know the function for pattern", pattern))
+}
+
+assert_patterns_unique <- function(user_geometry_fns, user_array_fns) {
+    names_geometry <- names(user_geometry_fns)
+    names_array <- names(user_array_fns)
+    msg_geometry <- '`options("ggpattern_geometry_funcs")` sets custom "geometry" patterns'
+    msg_array <- '`options("ggpattern_array_funcs")` sets custom "array" patterns'
+    # check pattern names not duplicated within custom pattern types
+    duplicated_geometry <- duplicated(names_geometry)
+    if (any(duplicated_geometry)) {
+        name <- names_geometry[which(duplicated_geometry)[1]]
+        msg <- c(glue('There are multiple custom "geometry" patterns named "{name}"'),
+                 i = msg_geometry)
+        abort(msg)
+    }
+    duplicated_array <- duplicated(names_array)
+    if (any(duplicated_array)) {
+        name <- names_array[which(duplicated_array)[1]]
+        msg <- c(glue('There are multiple custom "array" patterns named "{name}"'),
+                 i = msg_array)
+        abort(msg)
+    }
+    # check pattern names not duplicated between custom pattern types
+    match_user <- match(names_geometry, names_array)
+    if (any(!is.na(match_user))) {
+        index <- which(!is.na(match_user))[1]
+        name <- names_geometry[index]
+        msg <- c(glue('There is a custom "geometry" pattern and custom "array" pattern both named "{name}"'),
+                 i = msg_geometry,
+                 i = msg_array)
+        abort(msg)
+    }
+    # check pattern names not duplicated between custom patterns and builtin patterns
+    match_geometry <- match(names_geometry, names_pattern)
+    if (any(!is.na(match_geometry))) {
+        index <- which(!is.na(match_geometry))[1]
+        name <- names_geometry[index]
+        msg <- c(glue('There is a custom "geometry" pattern and builtin {{gridpattern}} pattern both named "{name}"'),
+                 i = msg_geometry)
+        abort(msg)
+    }
+    match_array <- match(names_array, names_pattern)
+    if (any(!is.na(match_array))) {
+        index <- which(!is.na(match_array))[1]
+        name <- names_array[index]
+        msg <- c(glue('There is a custom "array" pattern and builtin {{gridpattern}} pattern both named "{name}"'),
+                 i = msg_array)
+        abort(msg)
+    }
+    invisible(NULL)
 }

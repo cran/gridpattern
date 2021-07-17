@@ -106,6 +106,7 @@ create_pattern_regular_polygon_via_sf <- function(params, boundary_df, aspect_ra
     density <- params$pattern_density
     rot <- params$pattern_rot
     shape <- params$pattern_shape
+    assert_rp_shape(shape)
 
     n_par <- max(lengths(list(fill, col, lwd, lty, density, rot, shape)))
 
@@ -236,23 +237,26 @@ get_xy_par_hex <- function(grid_xy, i_par, m_pat, spacing = 1) {
 }
 
 # create grid of points large enough to cover viewport no matter the angle
-get_xy_grid <- function(params, vpm) {
-    spacing <- params$pattern_spacing
+get_xy_grid <- function(params, vpm, wavelength = FALSE) {
     xoffset <- params$pattern_xoffset
     yoffset <- params$pattern_yoffset
+    if (wavelength)
+        h_spacing <- params$pattern_wavelength
+    else
+        h_spacing <- params$pattern_spacing
 
     gm <- 1.00 # seems to need to be this big so {ggpattern} legends render correctly
-    x_adjust <- switch(params$pattern_grid, hex = 0.5 * spacing, 0)
-    x_seq <- seq_robust(from = 0, to = gm * vpm$length + x_adjust, by = spacing)
+    x_adjust <- switch(params$pattern_grid, hex = 0.5 * h_spacing, 0)
+    x_seq <- seq_robust(from = 0, to = gm * vpm$length + x_adjust, by = h_spacing)
     x <- xoffset + vpm$x + c(rev(tail(-x_seq, -1L)), x_seq)
     x_min <- min(x)
     x_max <- max(x)
 
     # adjust vertical spacing for "hex" pattern
     if (params$pattern_grid == "square")
-        v_spacing <- spacing
+        v_spacing <- params$pattern_spacing
     else
-        v_spacing <- 0.5 * sqrt(3) * spacing
+        v_spacing <- 0.5 * sqrt(3) * params$pattern_spacing
     y_seq <- seq_robust(from = 0, to = gm * vpm$length, by = v_spacing)
     # ensure middle y point in a hex grid is an odd number so we don't accidentally offset it
     if (params$pattern_grid != "square" && (length(y_seq) %% 2L == 0L))
@@ -263,7 +267,7 @@ get_xy_grid <- function(params, vpm) {
 
     list(x = x, y = y,
          x_min = x_min, x_max = x_max, y_min = y_min, y_max = y_max,
-         h_spacing = spacing, v_spacing = v_spacing
+         h_spacing = h_spacing, v_spacing = v_spacing
     )
 }
 
@@ -283,5 +287,17 @@ get_xy_polygon <- function(shape, params, radius_outer, rot) {
         n_vertices <- get_n_vertices(shape)
         radius_inner <- params$pattern_scale * radius_outer
         concave_xy(n_vertices, polygon_angle, radius_outer, radius_inner)
+    }
+}
+
+assert_rp_shape <- function(shape) {
+    tf <- grepl("^convex[[:digit:]]+$|^star[[:digit:]]+$|^square$|^circle$|^null$", shape)
+    if (all(tf)) {
+        invisible(NULL)
+    } else {
+        shape <- shape[which(!tf)[1]]
+        msg <- c(paste("Unknown shape", shape),
+                 i = 'See `help("grid.pattern_regular_polygon")` for supported shapes')
+        abort(msg)
     }
 }

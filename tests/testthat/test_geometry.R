@@ -13,9 +13,8 @@ test_that("geometry patterns work as expected", {
     dev.off()
     unlink(png_file)
 
-
     skip_if_not_installed("vdiffr")
-    skip_on_appveyor()
+    skip_on_ci()
     library("vdiffr")
 
     expect_doppelganger("default", grid.pattern)
@@ -30,6 +29,9 @@ test_that("geometry patterns work as expected", {
     expect_doppelganger("crosshatch", function()
         grid.pattern_crosshatch(x, y, color="black", fill="blue", fill2="yellow", density = 0.5))
 
+    expect_error(assert_rp_shape(1), "Unknown shape 1")
+    expect_null(assert_rp_shape(c("square", "convex4")))
+    expect_null(assert_rp_shape(c("star5", "circle", "null")))
     expect_doppelganger("regular_polygon", function()
         grid.pattern_regular_polygon(x, y, color = "black", fill = "blue", density = 0.5))
 
@@ -52,6 +54,16 @@ test_that("geometry patterns work as expected", {
         y <- c(0.2, 0.3, 0.8, 0.5)
         grid.pattern("stripe", x, y, gp = gpar(col="blue", fill="red", lwd=2))
     })
+
+    expect_doppelganger("wave_sine", function()
+        grid.pattern_wave(x, y, colour = "black", type = "sine",
+                          fill = c("red", "blue"), density = 0.4,
+                          spacing = 0.15, angle = 0,
+                          amplitude = 0.05, frequency = 1 / 0.20))
+
+    expect_doppelganger("wave_triangle", function()
+        grid.pattern_wave(x, y, color="black", fill="yellow",
+                           type = "triangle", density = 0.5, spacing = 0.15))
 
     expect_doppelganger("weave", function()
         grid.pattern_weave(x, y, color="black", fill="yellow", fill2="blue",
@@ -80,4 +92,3 @@ test_that("geometry patterns work as expected", {
     expect_doppelganger("two_id", function()
         grid.pattern(x = x, y = y, id = id))
 })
-

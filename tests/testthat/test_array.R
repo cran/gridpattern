@@ -22,15 +22,18 @@ my_png <- function(f, fn) {
 }
 
 test_that("array patterns works as expected", {
+    skip_on_ci()
     skip_on_cran()
     skip_if_not_installed("magick")
     skip_if_not(capabilities("cairo"))
     x <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     y <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     test_raster("gradient.png",
-                function() grid.pattern_gradient(x, y, fill="blue", fill2="green", orientation="radial"))
+                function() grid.pattern_gradient(x, y, fill="blue", fill2="green",
+                                                 orientation="radial", use_R4.1_gradients = FALSE))
     test_raster("gradient_horizontal.png",
-                function() grid.pattern_gradient(x, y, fill="blue", fill2="green", orientation="horizontal"))
+                function() grid.pattern_gradient(x, y, fill="blue", fill2="green",
+                                                 orientation="horizontal", use_R4.1_gradients = FALSE))
     logo_filename   <- system.file("img", "Rlogo.png" , package="png")
     test_raster("image.png", function() {
                     grid.pattern_image(x, y, filename=logo_filename, type="fit")
@@ -51,6 +54,25 @@ test_that("array patterns works as expected", {
                 function() grid.pattern_magick(x, y, type="octagons", fill="blue", scale=2))
     test_raster("placeholder.png",
                 function() grid.pattern_placeholder(x, y, type="bear"))
+
+    test_raster("plasma_zero.png",
+                function() grid.pattern_plasma(x = c(0.5, 0.5, 0.5, 0.5),
+                                               y = c(0, 1, 1, 0), fill = "green"))
+
+    playing_card_symbols <- c("\u2660", "\u2665", "\u2666", "\u2663")
+    test_raster("text.png",
+                function() grid.pattern_text(x, y, shape = playing_card_symbols,
+                                             colour = c("black", "red", "red", "black"),
+                                             use_R4.1_clipping = FALSE,
+                                             size = 18, spacing = 0.1, angle = 0))
+
+
+    gp <- gpar(fill = c("blue", "red", "yellow", "green"), col = "black")
+    test_raster("rose.png",
+             function() grid.pattern_rose(x, y,
+                                          spacing = 0.15, density = 0.5, angle = 0,
+                                          use_R4.1_clipping = FALSE,
+                                          frequency = 1:4, gp = gp))
 
     # plasma images are random and doesn't seem to be a way to set a seed
     tmpfile <- tempfile(fileext = ".png")
@@ -76,6 +98,20 @@ test_that("array patterns works as expected", {
     }
     options(ggpattern_array_funcs = list(simple = create_pattern_simple))
     test_raster("simple.png", function() grid.pattern("simple", x, y, type = "b"))
+
+    # clipGrob
+    clippee <- patternGrob("circle", gp = gpar(col = "black", fill = "yellow"),
+                           spacing = 0.1, density = 0.5)
+    angle <- seq(2 * pi / 4, by = 2 * pi / 6, length.out = 7)
+    x_hex_outer <- 0.5 + 0.5 * cos(angle)
+    y_hex_outer <- 0.5 + 0.5 * sin(angle)
+    x_hex_inner <- 0.5 + 0.25 * cos(rev(angle))
+    y_hex_inner <- 0.5 + 0.25 * sin(rev(angle))
+    clipper <- grid::pathGrob(x = c(x_hex_outer, x_hex_inner),
+                              y = c(y_hex_outer, y_hex_inner),
+                              rule = "evenodd")
+    clipped <- clippingPathGrob(clippee, clipper, use_R4.1_clipping = FALSE)
+    test_raster("clipGrob.png", function() grid.draw(clipped))
 
     # ambient
     skip_if_not_installed("ambient")

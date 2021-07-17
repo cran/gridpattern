@@ -1,3 +1,62 @@
+gridpattern v0.2.1
+==================
+
+Breaking Changes
+----------------
+
+* "array" patterns no longer set a minimum 12 pixel image width and/or height.
+  In particular, they can now have a zero pixel image width and/or height
+  (in which case the array pattern returns a ``grid::nullGrob()``).
+* "array" patterns no longer reduces the number of requested pixels when `legend = TRUE`.
+
+New Features
+------------
+
+* Supports the following new patterns:
+
+  * "rose" (curve) ``grid.pattern_rose()`` (#43)
+  * "text" ``grid.pattern_text()`` (#40)
+  * "wave" ``grid.pattern_wave()`` which supports "sine" and "triangle" `type` waves (#16)
+
+* `names_pattern` is a new character vector of supported (builtin) patterns.
+* `clippingPathGrob()` is a function that clips one grob according to clipping path set by a second grob.
+
+  * If `use_R4.1_clipping` is `TRUE` we simply use the new R 4.1 clipping path feature
+  * If `use_R4.1_clipping` is `FALSE` we generate a `grid::rasterGrob()` approximation
+  * If `use_R4.1_clipping` is `NULL` try to guess an appropriate choice.
+  * The default for `use_R4.1_clipping` can be set by `options("ggpattern_use_R4.1_clipping")`
+
+* `grid.pattern_gradient()` now supports the argument `use_R4.1_gradients`
+
+  * If `TRUE` use the new R 4.1 gradient feature
+  * If `FALSE` use a `rasterGrob` approximation (old behaviour)
+  * If `NULL` try to guess an appropriate choice.
+  * The default for `use_R4.1_gradients` can be set by `options("ggpattern_use_R4.1_gradients")`
+
+* The following package options can now be set by `options()`:
+
+  * `ggpattern_use_R4.1_clipping` If `TRUE` use the grid clipping path feature introduced in R v4.1.0.
+                    If `FALSE` do a `rasterGrob` approximation of the clipped pattern.
+                    Currently used by `clippingPathGrob()`, `grid.pattern_rose()`, 
+                    `grid.pattern_text()`, and available for custom patterns.
+  * `ggpattern_use_R4.1_features` Set the default for all the other
+                    `ggpattern_use_R4.1_*` options arguments.
+  * `ggpattern_use_R4.1_gradients` If `TRUE` use the grid gradient feature introduced in R v4.1.0.
+                    If `FALSE` do a `rasterGrob` approximation of the gradient pattern.
+                    Currently used by `grid.pattern_gradient()` and available for custom patterns.
+  * `ggpattern_use_R4.1_masks` If `TRUE` use the grid mask feature introduced in R v4.1.0.
+                    Currently unused by this package but available for custom patterns.
+  * `ggpattern_use_R4.1_patterns` If `TRUE` use the grid pattern feature introduced in R v4.1.0.
+                    Currently unused by this package but available for custom patterns.
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `grid.pattern()` now throws an error if there is a non-unique pattern name
+  (set by `options("ggpattern_geometry_funcs")` and/or `options("ggpattern_array_funcs")`).
+* Fixes an error when *catching* a {magick} image reading error
+  for some array patterns.
+
 gridpattern v0.1.2
 ==================
 
