@@ -17,7 +17,8 @@
 #'  }
 #' @seealso For more information about the noise types please see the relevant `ambient` documentation:
 #'   [ambient::noise_cubic()], [ambient::noise_perlin()], [ambient::noise_simplex()],
-#'   [ambient::noise_value()], [ambient::noise_white()], and [ambient::noise_worley()]
+#'   [ambient::noise_value()], [ambient::noise_white()], and [ambient::noise_worley()].
+#'  [grid.pattern_plasma()] provides an alternative noise pattern that depends on `magick`.
 #' @export
 grid.pattern_ambient <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                  type = "simplex", fill = gp$fill %||% "grey80", fill2 = "#4169E1",
@@ -26,7 +27,7 @@ grid.pattern_ambient <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, 
                                  octaves = 3, lacunarity = 2, gain = 0.5,
                                  pertubation = "none", pertubation_amplitude = 1,
                                  value = "cell", distance_ind = c(1, 2), jitter = 0.45,
-                                 res = 72, alpha = NA_real_,
+                                 res = getOption("ggpattern_res", 72), alpha = NA_real_,
                                  default.units = "npc", name = NULL, gp = gpar(), draw = TRUE, vp = NULL) {
     grid.pattern("ambient", x, y, id,
                  type = type, fill = fill, fill2 = fill2,
@@ -50,8 +51,7 @@ grid.pattern_ambient <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, 
 #' @noRd
 create_pattern_ambient <- function(width, height, params, legend) {
 
-  if (!requireNamespace("ambient"))
-      abort("The suggested package {ambient} must be installed for this feature")
+  assert_suggested("ambient", "ambient")
 
   colour1 <- as.character(params$pattern_fill )
   colour2 <- as.character(params$pattern_fill2)

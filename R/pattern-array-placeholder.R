@@ -8,17 +8,19 @@
 #'             If you would like only greyscale images append `bw` to the name.
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   # requires internet connection to download from placeholder image websites
-#'   try(grid.pattern_placeholder(x_hex, y_hex, type="bear"))
+#'   if (require("magick")) {
+#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     # requires internet connection to download from placeholder image websites
+#'     try(grid.pattern_placeholder(x_hex, y_hex, type="bear"))
+#'   }
 #'
 #'   print(names_placeholder)
-#' @seealso The `ggpattern` documentation: <https://coolbutuseless.github.io/package/ggpattern/articles/pattern-placeholder.html>
 #' @export
 grid.pattern_placeholder <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                      type = "kitten", alpha = gp$alpha %||% NA_real_,
-                                     aspect_ratio = 1, key_scale_factor = 1, res = 72,
+                                     aspect_ratio = 1, key_scale_factor = 1,
+                                     res = getOption("ggpattern_res", 72),
                                      default.units = "npc", name = NULL, gp = gpar(), draw = TRUE, vp = NULL) {
     grid.pattern("placeholder", x, y, id,
                  type = type, alpha = alpha,
@@ -112,6 +114,9 @@ fetch_placeholder_img <- function(width = 100, height = 100, type = 'kitten') {
 #'
 #' @noRd
 fetch_placeholder_array <- function(width, height, params, legend) {
+
+  assert_suggested("magick", "placeholder")
+
   if (legend) {
     img <- magick::image_blank(width, height)
     return(convert_img_to_array(img))

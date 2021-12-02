@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Provides 'grid' grobs that fill in a user-defined area with various patterns.  Includes enhanced versions of the geometric and image-based patterns originally contained in the 'ggpattern' package as well as original 'pch', 'polygon_tiling', 'regular_polygon', 'rose', 'text', 'wave', and 'weave' patterns plus support for custom user-defined patterns.
+Provides 'grid' grobs that fill in a user-defined area with various patterns. Includes enhanced versions of the geometric and image-based patterns originally contained in the 'ggpattern' package as well as original 'pch', 'polygon_tiling', 'regular_polygon', 'rose', 'text', 'wave', and 'weave' patterns plus support for custom user-defined patterns.
 }
 \section{Package options}{
 
@@ -16,6 +16,7 @@ The following \code{gridpattern} options may be set globally via \code{\link[bas
 \describe{
 \item{ggpattern_array_funcs}{Set custom \dQuote{array} pattern functions.}
 \item{ggpattern_geometry_funcs}{Set custom \dQuote{geometry} pattern functions.}
+\item{ggpattern_res}{Set custom raster image resolution (pixels per inch) for certain patterns.}
 \item{ggpattern_use_R4.1_clipping}{If \code{TRUE} use the grid clipping path feature introduced in R v4.1.0.
 If \code{FALSE} do a \code{rasterGrob} approximation of the clipped pattern.
 If \code{NULL} try to guess an appropriate choice.}
@@ -48,7 +49,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Mike FC (Patterns extracted from ggpattern)
+  \item Mike FC (Code/docs adapted from ggpattern)
 }
 
 Other contributors:

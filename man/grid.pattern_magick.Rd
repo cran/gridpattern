@@ -27,7 +27,7 @@ grid.pattern_magick(
   alpha = gp$alpha \%||\% NA_real_,
   aspect_ratio = 1,
   key_scale_factor = 1,
-  res = 72,
+  res = getOption("ggpattern_res", 72),
   default.units = "npc",
   name = NULL,
   gp = gpar(),
@@ -87,20 +87,22 @@ are only given as numeric vectors.}
 A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to the graphic device as a side effect.
 }
 \description{
-\code{grid.pattern_image()} draws a \code{imagemagick} pattern onto the graphic device.
+\code{grid.pattern_magick()} draws a \code{imagemagick} pattern onto the graphic device.
 \code{names_magick}, \code{names_magick_intensity}, and
 \code{names_magick_stripe} are character vectors of supported \code{type} values
 plus subsets for shaded intensity and stripes.
 }
 \examples{
-  x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-  y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-  grid.pattern_magick(x_hex, y_hex, type="octagons", fill="blue", scale=2)
+  if (require("magick")) {
+    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+    grid.pattern_magick(x_hex, y_hex, type="octagons", fill="blue", scale=2)
+  }
+
   # supported magick pattern names
   print(names_magick)
 }
 \seealso{
-The \code{ggpattern} documentation \url{https://coolbutuseless.github.io/package/ggpattern/articles/pattern-magick.html}
-and \code{imagemagick} documentation \url{http://www.imagemagick.org/script/formats.php} for more information.
+The \code{imagemagick} documentation \url{http://www.imagemagick.org/script/formats.php} for more information.
 }
 \keyword{datasets}

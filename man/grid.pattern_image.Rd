@@ -17,7 +17,7 @@ grid.pattern_image(
   alpha = gp$alpha \%||\% NA_real_,
   aspect_ratio = 1,
   key_scale_factor = 1,
-  res = 72,
+  res = getOption("ggpattern_res", 72),
   default.units = "npc",
   name = NULL,
   gp = gpar(),
@@ -87,17 +87,20 @@ Affected by \code{scale} and \code{gravity}.}
 }
 }
 \examples{
- x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
- y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
- logo_filename <- system.file("img", "Rlogo.png" , package = "png")
- grid.pattern_image(x_hex, y_hex, filename = logo_filename, type = "fit")
+  if (require("magick")) {
+    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+    logo_filename <- system.file("img", "Rlogo.png" , package = "png")
+    grid.pattern_image(x_hex, y_hex, filename = logo_filename, type = "fit")
 
- # "tile" `type` image pattern depends on `magick` functionality
- # which is not reliable across platforms
- grid::grid.newpage()
- try(grid.pattern_image(x_hex, y_hex, filename = logo_filename,
-                        type = "tile"))
+    # "tile" `type` image pattern depends on `magick` functionality
+    # which is not reliable across platforms
+    grid::grid.newpage()
+    try(grid.pattern_image(x_hex, y_hex, filename = logo_filename,
+                           type = "tile"))
+  }
 }
 \seealso{
-The \code{ggpattern} documentation: \url{https://coolbutuseless.github.io/package/ggpattern/articles/pattern-image.html}
+\code{\link[=grid.pattern_placeholder]{grid.pattern_placeholder()}} is an image pattern that uses images
+downloaded from the internet.
 }

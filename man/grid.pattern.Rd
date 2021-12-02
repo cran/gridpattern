@@ -110,6 +110,8 @@ See \code{\link[=grid.pattern_plasma]{grid.pattern_plasma()}} for more informati
 See \code{\link[=grid.pattern_polygon_tiling]{grid.pattern_polygon_tiling()}} for more information.}
 \item{regular_polygon}{Regular polygon patterns.
 See \code{\link[=grid.pattern_regular_polygon]{grid.pattern_regular_polygon()}} for more information.}
+\item{rose}{Rose array/geometry patterns.
+See \code{\link[=grid.pattern_rose]{grid.pattern_rose()}} for more information.}
 \item{stripe}{Stripe geometry patterns.
 See \code{\link[=grid.pattern_stripe]{grid.pattern_stripe()}} for more information.}
 \item{text}{Text array/geometry patterns.
@@ -118,8 +120,8 @@ See \code{\link[=grid.pattern_text]{grid.pattern_text()}} for more information.}
 See \code{\link[=grid.pattern_wave]{grid.pattern_wave()}} for more information.}
 \item{weave}{Weave geometry patterns.
 See \code{\link[=grid.pattern_weave]{grid.pattern_weave()}} for more information.}
-\item{Custom geometry-based patterns}{See \url{https://coolbutuseless.github.io/package/ggpattern/articles/developing-patterns-2.html} for more information.}
-\item{Custom array-based patterns}{See \url{https://coolbutuseless.github.io/package/ggpattern/articles/developing-patterns-3.html} for more information.}
+\item{Custom geometry-based patterns}{See \url{https://trevorldavis.com/R/gridpattern/dev/articles/developing-patterns.html} for more information.}
+\item{Custom array-based patterns}{See \url{https://trevorldavis.com/R/gridpattern/dev/articles/developing-patterns.html} for more information.}
 }
 }
 \examples{
@@ -157,21 +159,22 @@ See \code{\link[=grid.pattern_weave]{grid.pattern_weave()}} for more information
    grid.pattern_regular_polygon(x_hex, y_hex, color = "transparent",
                                 fill = c("white", "grey", "black"),
                                 density = 1.0, spacing = 0.1,
-                                shape = "convex6", type = "hex")
+                                shape = "convex6", grid = "hex")
+   if (require("magick")) {
+     # array-based patterns
+     # 'image' pattern
+     logo_filename <- system.file("img", "Rlogo.png" , package="png")
+     grid.newpage()
+     grid.pattern("image", x_hex, y_hex, filename=logo_filename, type="fit")
 
-   # array-based patterns
-   # 'image' pattern
-   logo_filename <- system.file("img", "Rlogo.png" , package="png")
-   grid.newpage()
-   grid.pattern("image", x_hex, y_hex, filename=logo_filename, type="fit")
-
-   # 'plasma' pattern
-   grid.newpage()
-   grid.pattern("plasma", x_hex, y_hex, fill="green")
+     # 'plasma' pattern
+     grid.newpage()
+     grid.pattern("plasma", x_hex, y_hex, fill="green")
+   }
  }
 }
 \seealso{
 \url{https://coolbutuseless.github.io/package/ggpattern/index.html}
-for more details on the \code{ggpattern} patterns and their parameters.
+for more details on the \code{ggpattern} package.
 }
 \keyword{datasets}

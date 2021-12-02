@@ -1,6 +1,6 @@
 #' Magick patterned grobs
 #'
-#' `grid.pattern_image()` draws a `imagemagick` pattern onto the graphic device.
+#' `grid.pattern_magick()` draws a `imagemagick` pattern onto the graphic device.
 #' `names_magick`, `names_magick_intensity`, and
 #' `names_magick_stripe` are character vectors of supported `type` values
 #' plus subsets for shaded intensity and stripes.
@@ -12,17 +12,20 @@
 #' @param fill Fill colour
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   grid.pattern_magick(x_hex, y_hex, type="octagons", fill="blue", scale=2)
+#'   if (require("magick")) {
+#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     grid.pattern_magick(x_hex, y_hex, type="octagons", fill="blue", scale=2)
+#'   }
+#'
 #'   # supported magick pattern names
 #'   print(names_magick)
-#' @seealso The `ggpattern` documentation <https://coolbutuseless.github.io/package/ggpattern/articles/pattern-magick.html>
-#'          and `imagemagick` documentation <http://www.imagemagick.org/script/formats.php> for more information.
+#' @seealso The `imagemagick` documentation <http://www.imagemagick.org/script/formats.php> for more information.
 #' @export
 grid.pattern_magick <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                 type = "hexagons", fill = "grey20", scale = 1, filter = "box",
-                                alpha = gp$alpha %||% NA_real_, aspect_ratio = 1, key_scale_factor = 1, res = 72,
+                                alpha = gp$alpha %||% NA_real_, aspect_ratio = 1, key_scale_factor = 1,
+                                res = getOption("ggpattern_res", 72),
                                 default.units = "npc", name = NULL, gp = gpar(), draw = TRUE, vp = NULL) {
     grid.pattern("magick", x, y, id,
                  type = type, fill = fill, scale = scale, scale = scale, filter = filter,
@@ -78,6 +81,8 @@ names_magick_stripe <- c(
 #'
 #' @noRd
 create_magick_pattern_as_array <- function(width, height, params, legend) {
+
+  assert_suggested("magick", "magick")
 
   if (legend) {
       params$pattern_scale <- params$pattern_scale * params$pattern_key_scale_factor

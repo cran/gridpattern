@@ -6,7 +6,7 @@
 \alias{names_polygon_tiling}
 \title{Polygon tiling patterned grobs}
 \format{
-An object of class \code{character} of length 12.
+An object of class \code{character} of length 35.
 }
 \usage{
 grid.pattern_polygon_tiling(
@@ -91,19 +91,42 @@ covering a larger area.  Size of the pattern is controlled by \code{spacing}.
 We support the following polygon tiling \code{type}s:
 
 \describe{
-\item{herringbone}{Creates a herringbone tiling made of rectangles.}
-\item{hexagonal}{Creates a hexagonal tiling made of hexagons.}
-\item{pythagorean}{Creates a Pythagorean tiling made of squares of two different sizes.}
-\item{rhombitrihexagonal}{Creates a rhombitrihexagonal tiling made out of
+\item{\code{herringbone}}{Creates a herringbone tiling made of rectangles.}
+\item{\code{hexagonal}}{Creates a hexagonal tiling made of hexagons.}
+\item{\code{pythagorean}}{Creates a Pythagorean tiling made of squares of two different sizes.}
+\item{\code{rhombille}}{Creates a rhombille tiling made of rhombi.}
+\item{\code{rhombitrihexagonal}}{Creates a rhombitrihexagonal tiling made out of
 dodecagons, hexagons, and squares.}
-\item{snub_square}{Creates a snub square tiling made of squares and triangles.}
-\item{snub_trihexagonal}{Creates a snub trihexagonal tiling made of hexagons and triangles.}
-\item{square}{Creates a square tiling made of squares.}
-\item{triangular}{Creates a triangular tiling made of equilateral triangles.}
-\item{trihexagonal}{Creates a trihexagonal tiling made of hexagons and triangles.}
-\item{truncated_square}{Creates a truncated square tiling made of octagons and squares.}
-\item{truncated_hexagonal}{Creates a truncated hexagonal tiling made of dodecagons and triangles.}
-\item{truncated_trihexagonal}{Creates a truncated trihexagonal tiling made of hexagons, squares, and triangles.}
+\item{\code{snub_square}}{Creates a snub square tiling made of squares and triangles.}
+\item{\code{snub_trihexagonal}}{Creates a snub trihexagonal tiling made of hexagons and triangles.}
+\item{\code{square}}{Creates a square tiling made of squares.}
+\item{\code{tetrakis_square}}{Creates a tetrakis square tiling made of isosceles right triangles.}
+\item{\code{triangular}}{Creates a triangular tiling made of equilateral triangles.}
+\item{\code{trihexagonal}}{Creates a trihexagonal tiling made of hexagons and triangles.}
+\item{\code{truncated_square}}{Creates a truncated square tiling made of octagons and squares.}
+\item{\code{truncated_hexagonal}}{Creates a truncated hexagonal tiling made of dodecagons and triangles.}
+\item{\code{truncated_trihexagonal}}{Creates a truncated trihexagonal tiling made of hexagons, squares, and triangles.}
+\item{\verb{2*.2**.2*.2**}}{Creates a polygon tiling made of rhombi.}
+\item{\verb{2**.3**.12*}}{Creates a polygon tiling made of rhombi, triangles, and twelve-pointed stars.}
+\item{\verb{3.3.3.3**}}{Creates a polygon tiling made of triangles.}
+\item{\verb{3.3*.3.3**}}{Creates a regular (star) polygon tiling made of triangles and three-pointed stars.}
+\item{\verb{3.3.3.12*.3.3.12*}}{Creates a regular (star) polygon tiling made of triangles and twelve-pointed stars.}
+\item{\verb{3.3.8*.3.4.3.8*}}{Creates a regular (star) polygon tiling made of triangles, squares, and eight-pointed stars.}
+\item{\verb{3.3.8*.4**.8*}}{Creates a regular (star) polygon tiling made of triangles, four-pointed stars, and eight-pointed stars.}
+\item{\verb{3.4.6.3.12*}}{Creates a regular (star) polygon tiling made of triangles, squares, hexagons, and twelve-pointed stars.}
+\item{\verb{3.4.8.3.8*}}{Creates a regular (star) polygon tiling made of triangles, squares, octagons, and eight-pointed stars.}
+\item{\verb{3.6*.6**}}{Creates a regular (star) polygon tiling made of triangles and six-pointed stars.}
+\item{\verb{4.2*.4.2**}}{Creates a polygon tiling made of squares and rhombi.}
+\item{\verb{4.4*.4**}}{Creates a regular (star) polygon tiling made of squares and four-pointed stars.}
+\item{\verb{4.6.4*.6}}{Creates a regular (star) polygon tiling made of squares, hexagons, and four-pointed stars.}
+\item{\verb{4.6*.4.6*.4.6*}}{Creates a regular (star) polygon tiling made of squares and six-pointed stars.}
+\item{\verb{4.8*.4**.8*}}{Creates a polygon tiling of squares and eight-pointed stars.}
+\item{\verb{6.6*.6.6*}}{Creates a regular (star) polygon tiling made of hexagons and six-pointed stars.}
+\item{\verb{8.4*.8.4*}}{Creates a regular (star) polygon tiling made of octagons and four-pointed stars.}
+\item{\verb{9.3.9.3*}}{Creates a regular (star) polygon tiling made of triangles, nonagons, and three-pointed stars.}
+\item{\verb{12.3*.12.3*}}{Creates a regular (star) polygon tiling made of dodecagons and three-pointed stars.}
+\item{\verb{12.12.4*}}{Creates a regular (star) polygon tiling made of dodecagons and four-pointed stars.}
+\item{\verb{18.18.3*}}{Creates a regular (star) polygon tiling made of eighteen-sided polygons and three-pointed stars.}
 }
 }
 \examples{
@@ -118,13 +141,20 @@ dodecagons, hexagons, and squares.}
    grid.pattern_polygon_tiling(x_hex, y_hex, type = "herringbone", gp = gp1)
 
    grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal", gp = gp3)
+   grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal",
+                               spacing = 0.2, gp = gp3)
 
    grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean", gp = gp2)
+   grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean",
+                               spacing = 0.2, gp = gp2)
 
    grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "truncated_square", gp = gp3)
+   grid.pattern_polygon_tiling(x_hex, y_hex, type = "snub_trihexagonal",
+                               spacing = 0.2, gp = gp3)
+
+   grid.newpage()
+   grid.pattern_polygon_tiling(x_hex, y_hex, type = "rhombille",
+                               spacing = 0.2, gp = gp3)
  }
 
 }

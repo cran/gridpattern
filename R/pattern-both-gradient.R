@@ -13,21 +13,21 @@
 #' @param res Assumed resolution (in pixels per graphic device inch) to use when creating array pattern.
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'  if (require("grid") && capabilities("png")) {
+#'  if (require("grid") && require("magick") && capabilities("png")) {
 #'    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'    grid.pattern_gradient(x_hex, y_hex, fill = "green")
 #'    grid.newpage()
 #'    grid.pattern_gradient(x_hex, y_hex, fill = "green", orientation = "radial")
 #'  }
-#' @seealso The `ggpattern` documentation: <https://coolbutuseless.github.io/package/ggpattern/articles/pattern-gradient.html>
 #' @export
 grid.pattern_gradient <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                   fill = gp$fill %||% "grey80", fill2 = "#4169E1",
                                   orientation = "vertical", alpha = gp$alpha %||% NA_real_,
                                   use_R4.1_gradients = getOption("ggpattern_use_R4.1_gradients",
                                                                  getOption("ggpattern_use_R4.1_features")),
-                                  aspect_ratio = 1, key_scale_factor = 1, res = 72,
+                                  aspect_ratio = 1, key_scale_factor = 1,
+                                  res = getOption("ggpattern_res", 72),
                                   default.units = "npc", name = NULL, gp = gpar(), draw = TRUE, vp = NULL) {
     grid.pattern("gradient", x, y, id,
                  fill = fill, fill2 = fill2,
@@ -90,27 +90,27 @@ create_gradient_as_geometry <- function(params, boundary_df, aspect_ratio, legen
 
   x_min <- min(boundary_df$x)
   x_max <- max(boundary_df$x)
-  x_med <- 0.5 * (x_min + x_max)
   y_min <- min(boundary_df$y)
   y_max <- max(boundary_df$y)
-  y_med <- 0.5 * (y_min + y_max)
-  x_range <- convertX(unit(x_max - x_min, "npc"), "in")
-  y_range <- convertY(unit(y_max - y_min, "npc"), "in")
-  gradient <- switch(orientation,
-     horizontal = linearGradient(c(colour1, colour2),
-                                 x1 = x_min, y1 = y_med,
-                                 x2 = x_max, y2 = y_med),
-     radial = radialGradient(c(colour1, colour2),
-                             cx1 = x_med, cy1 = y_med,
-                             cx2 = x_med, cy2 = y_med,
-                             r2 = 0.5 * max(x_range, y_range),
-                             extend = "none"
-                             ),
-     vertical = linearGradient(c(colour1, colour2),
-                               x1 = x_med, y1 = y_min,
-                               x2 = x_med, y2 = y_max)
-  )
+  x_range <- convertX(unit(x_max - x_min, "npc"), "in", valueOnly = TRUE)
+  y_range <- convertY(unit(y_max - y_min, "npc"), "in", valueOnly = TRUE)
+  if (x_range == 0 || y_range == 0)
+      return(nullGrob())
 
+  if (x_range > y_range)
+      r2 <- 0.5 * x_range / y_range
+  else
+      r2 <- 0.5 * y_range / x_range
+
+  gradient <- switch(orientation,
+     horizontal = linearGradient(c(colour1, colour2), extend = "pad",
+                                 x1 = 0, y1 = 0.5, x2 = 1, y2 = 0.5),
+     radial = radialGradient(c(colour1, colour2), extend = "pad",
+                             cx1 = 0.5, cy1 = 0.5, cx2 = 0.5, cy2 = 0.5,
+                             r1 = 0, r2 = r2),
+     vertical = linearGradient(c(colour1, colour2), extend = "pad",
+                               x1 = 0.5, y1 = 0, x2 = 0.5, y2 = 1)
+  )
   gp <- gpar(col = NA, fill = gradient)
 
   convert_polygon_df_to_polygon_grob(boundary_df, gp = gp)
@@ -130,6 +130,8 @@ create_gradient_as_geometry <- function(params, boundary_df, aspect_ratio, legen
 #'
 #' @noRd
 create_gradient_as_array <- function(width, height, params, legend) {
+
+  assert_suggested("magick", "gradient")
 
   orientation <- check_default(params$pattern_orientation,
                                options = c('vertical', 'horizontal', 'radial'))

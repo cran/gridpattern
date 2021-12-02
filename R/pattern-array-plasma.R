@@ -6,14 +6,17 @@
 #' @param scale Extra scaling
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'   grid.pattern_plasma(x_hex, y_hex, fill = "green")
-#' @seealso The `ggpattern` documentation: <https://coolbutuseless.github.io/package/ggpattern/articles/pattern-plasma.html>
+#'   if (require("magick")) {
+#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#'     grid.pattern_plasma(x_hex, y_hex, fill = "green")
+#'   }
+#' @seealso [grid.pattern_ambient()] provides a noise pattern using the `ambient` package.
 #' @export
 grid.pattern_plasma <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                 fill = gp$fill %||% "grey80", scale = 1, alpha = gp$alpha %||% NA_real_,
-                                aspect_ratio = 1, key_scale_factor = 1, res = 72,
+                                aspect_ratio = 1, key_scale_factor = 1,
+                                res = getOption("ggpattern_res", 72),
                                 default.units = "npc", name = NULL, gp = gpar(), draw = TRUE, vp = NULL) {
     grid.pattern("plasma", x, y, id,
                  fill = fill, scale = scale, alpha = alpha,
@@ -28,6 +31,8 @@ grid.pattern_plasma <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, .
 #' @return array
 #' @noRd
 create_magick_plasma_as_array <- function(width, height, params, legend) {
+
+  assert_suggested("magick", "plasma")
 
   colour <- as.character(params$pattern_fill)
 
@@ -62,7 +67,7 @@ create_magick_plasma_img <- function(width=100, height=100, colour) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Make the white transparent
-  # Colourie the black pixels into the desired colour
+  # Colorize the black pixels into the desired colour
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   img <- magick::image_transparent(img, 'white')
   img <- magick::image_colorize(img, opacity = 50, colour)

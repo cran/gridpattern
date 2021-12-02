@@ -1,3 +1,74 @@
+gridpattern v0.3.0
+==================
+
+Breaking Changes
+----------------
+
+* The package `{magick}` has been downgraded from "Imports" to "Suggests" (#44).
+  You'll need to manually install `{magick}` with `install.packages("magick")` 
+  in order to use the following "array" patterns:
+
+  - "gradient" (but only if `use_R4.1_gradients` is `FALSE`)
+  - "image"
+  - "magick"
+  - "placeholder"
+  - "plasma"
+
+New Features
+------------
+
+* The following package option ``ggpattern_res`` can now be set by `options()`.
+  It controls default "raster" image pattern resolution (pixels per inch).
+  Defaults to 72 (pixels per inch).
+
+* `grid.pattern_polygon_tiling()` now supports the following additional polygon tiling `type`'s (#42):
+
+  - `"rhombille"` implements a rhombille tiling of rhombi (#37)
+  - `"tetrakis_square"` implements a tetrakis square tiling of isosceles right triangles (#38)
+  - `"2*.2**.2*.2**"` implements a polygon tiling made of rhombi.
+  - `"2**.3**.12*"` implements a polygon tiling made of rhombi, triangles, and twelve-pointed stars.
+  - `"3.3.3.3**"` implements a polygon tiling made of triangles.
+  - `"3.3*.3.3**"` implements a regular (star) polygon tiling made of triangles and three-pointed stars.
+  - `"3.3.3.12*.3.3.12*"` implements a regular (star) polygon tiling made of triangles and twelve-pointed starts.
+  - `"3.3.8*.3.4.3.8*"` implements a regular (star) polygon tiling of triangles,
+    squares, and eight-pointed stars.
+  - `"3.3.8*.4**.8*"` implements a regular (star) polygon tiling made of triangles, four-pointed stars,
+    and eight-pointed stars.
+  - `"3.4.6.3.12*"` implements a regular (star) polygon tiling made of triangles, squares,
+    hexagons, and twelve-pointed stars.
+  - `"3.4.8.3.8*"` implements a regular (star) polygon tiling of triangles,
+    squares, octagons, and eight-pointed stars.
+  - `"3.6*.6**"` implements a regular (star) polygon tiling made of triangles and six-pointed stars.
+  - `"4.2*.4.2**"` implements a polygon tiling made of squares and rhombi.
+  - `"4.4*.4**"` implements a regular (star) polygon tiling made of squares and four-pointed stars.
+  - `"4.6.4*.6"` implements a regular (star) polygon tiling made of squares, hexagons, and four-pointed stars.
+  - `"4.6*.4.6*.4.6*"` implements a regular (star) polygon of squares and six-pointed stars.
+  - `"4.8*.4**.8*"` implements a polygon tiling of squares and eight-pointed stars.
+  - `"6.6*.6.6*"` implements a regular (star) polygon of hexagons and six-pointed stars.
+  - `"8.4*.8.4*"` implements a regular (star) polygon of octagons and four-pointed stars.
+  - `"9.3.9.3*"` implements a regular (star) polygon of triangles, nonagons, and three-pointed stars.
+  - `"12.3*.12.3*"` implements a regular (star) polygon tiling made of dodecagons and three-pointed stars.
+  - `"12.12.4*"` implements a regular (star) polygon tiling made of dodecagons and four-pointed stars.
+  - `"18.18.3*"` implements a regular (star) polygon tiling made of eighteen-sided polygons and three-pointed stars.
+
+* `grid.pattern_regular_polygon()` now supports a `"tetrakis_left"` `shape` and `"tetrakis_right"` `shape` 
+  which both draw an isosceles right triangle (one oriented left and one oriented right) as well as a
+ `"rhombille_rhombus"` shape which draws a rhombus.
+  These are non-regular polygons intended to help produce tetrakis square and rhombille polygon tilings.
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `star_angle()` and `star_scale()` now handle the `n_vertices == 2` case 
+  (a "two-pointed star" polygon is a rhombus).
+* Fixes `grid.pattern_gradient()` when `use_R4.1_gradients=TRUE` to better
+  match behavior when `use_R4.1_gradients=FALSE`.
+* Now allows alpha values to be specified
+  within the `fill` (and `fill2`) colour strings for
+  `gridpattern_plasma()` and `gridpattern_gradient()` (when `use_R4.1_gradients=FALSE`).
+* In `pattern_square()` for the "horizontal" and "vertical" types the value `1L` is
+  now guaranteed to be in the center of the pattern (#46).
+
 gridpattern v0.2.1
 ==================
 
