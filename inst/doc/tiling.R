@@ -118,6 +118,35 @@ popViewport()
 add_borders()
 
 ## -----------------------------------------------------------------------------
+grid.elongated_triangular_tiling <- function(...) {
+    grid.polygon(x_sq, y_sq, gp = gpar(fill = yellow, col = NA))
+    grid.pattern_regular_polygon(..., shape = rep(c("convex4", "convex3"), each = 2), 
+                                 density = rep(c(1.41, 1.15), each = 2), 
+                                 grid = "elongated_triangle",
+                                 type = "square_tiling", subtype = "3412",
+                                 spacing = 0.2, angle = 0, 
+                                 rot = rep(c(45, 0), each = 2))
+}
+# 1 color elongated triangular tiling
+pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
+gp <- gpar(fill = yellow, col = "black")
+grid.elongated_triangular_tiling(gp = gp)
+popViewport()
+
+# 2 color elongated triangular tiling
+pushViewport(viewport(x=0.75, y=0.75, width=0.5, height=0.5))
+gp <- gpar(fill = c(red, red, yellow, yellow), col = "black")
+grid.elongated_triangular_tiling(gp = gp)
+popViewport()
+
+# 3 color elongated triangular tiling
+pushViewport(viewport(x=0.25, y=0.25, width=0.5, height=0.5))
+gp <- gpar(fill = c(red, blue, yellow, yellow), col = "black")
+grid.elongated_triangular_tiling(gp = gp)
+popViewport()
+add_borders()
+
+## -----------------------------------------------------------------------------
 grid.snub_square <- function(..., gp_sq, gp_sq2 = gp_sq, gp_tri = gp_sq) {
     scale_star <- star_scale(4, 90 + 60, external = TRUE)
     grid.polygon(x_sq, y_sq, gp = gp_sq)
