@@ -1,7 +1,7 @@
 Package: gridpattern
 Type: Package
 Title: 'grid' Pattern Grobs
-Version: 0.4.0
+Version: 0.5.1
 Authors@R: c(person("Mike", "FC", role = "aut", comment = "Code/docs adapted from ggpattern"),
         person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
         person("Thomas Lin", "Pedersen", role = "ctb", comment = "new_data_frame() copied from ggplot2"))
@@ -17,10 +17,10 @@ Imports: glue, grDevices, grid, memoise, png, rlang, sf, utils
 Suggests: ambient, knitr, magick, ragg, rmarkdown, testthat, vdiffr
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2022-01-12 17:27:28 UTC; trevor
+Packaged: 2022-02-16 20:27:31 UTC; trevor
 Author: Mike FC [aut] (Code/docs adapted from ggpattern),
   Trevor L Davis [aut, cre],
   Thomas Lin Pedersen [ctb] (new_data_frame() copied from ggplot2)
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-01-12 17:52:41 UTC
+Date/Publication: 2022-02-16 21:10:02 UTC

@@ -1,3 +1,38 @@
+gridpattern v0.5.1
+==================
+
+Breaking Changes
+----------------
+
+* `grid.pattern_rose()` and `grid.pattern_text()` now "clip" their boundary using an 
+  "alpha mask" rather than a "clipping path".  
+  Now use the argument `use_R4.1_masks`, the global option `ggpattern_use_R4.1_masks`, 
+  or the global option `ggpattern_use_R4.1_features` to toggle on/off the R 4.1 alpha mask 
+  feature instead of using the `use_R4.1_clipping` argument or 
+  the global option `ggpattern_use_R4.1_clipping` as before
+  (the latter continue to toggle on/off the R 4.1 clipping path feature in `clippingPathGrob()`).
+
+New Features
+------------
+
+* `alphaMaskGrob()` is a function that (alpha) masks one grob by using a second grob to specify the (alpha) mask.
+
+  * If `use_R4.1_masks` is `TRUE` we simply use the new R 4.1 (alpha) masks feature.
+  * If `use_R4.1_masks` is `FALSE` we generate a `grid::rasterGrob()` approximation.
+  * If `use_R4.1_masks` is `NULL` try to guess an appropriate choice.
+  * The default for `use_R4.1_masks` can be set by `options("ggpattern_use_R4.1_masks")`.
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `guess_has_R4.1_features()` now returns `TRUE` for the `ragg::agg_jpeg()`,
+  `ragg::agg_ppm()`, and `ragg::agg_tiff()` devices if `packageVersion("ragg") >= '1.2.0'`.
+  It also returns `TRUE` for `svglite::svglite()` if `packageVersion("svglite") >= '2.1.0'`.
+* `clippingPathGrob()` will now consistently - as previously documented - use `ragg::agg_png()` 
+  as the default `png_device` graphics device if it is available and `use_R4.1_clipping` is `FALSE`.
+* `grid.pattern_image()` should no longer throw an inscrutable `Error in magick_image_readpath`...
+  error on certain platforms such as Windows (#47).
+
 gridpattern v0.4.0
 ==================
 
@@ -14,8 +49,11 @@ Bug fixes and minor improvements
 
 * `grid.pattern_polygon_tiling()` now supports the "elongated_triangular" `type` (#48).
   "geometry" patterns now support a "elongated_triangle" `grid` value.
-* `guess_has_R4.1_features()` now returns `TRUE` for the `ragg::agg_png()` device if `packageVersion("ragg") >= '1.2.0'`.
-  It now also returns `TRUE` for the `grDevices::bmp(type = "cairo")`, `grDevices::cairo_ps()`, `grDevices::jpeg(type = "cairo")`, `grDevices::tiff(type = "cairo")`.
+* `guess_has_R4.1_features()` now returns `TRUE` for the `ragg::agg_png()` and
+  `ragg::agg_supertransparent()` devices if `packageVersion("ragg") >= '1.2.0'`.
+  It now also returns `TRUE` for the `grDevices::bmp(type = "cairo")`, 
+  `grDevices::cairo_ps()`, `grDevices::jpeg(type = "cairo")`, 
+  and `grDevices::tiff(type = "cairo")` devices if `getRversion() >= '4.1.0'`.
 
 gridpattern v0.3.1
 ==================
