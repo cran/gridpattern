@@ -25,7 +25,6 @@ get_params <- function(..., pattern = "none", prefix = "pattern_", gp = gpar()) 
         switch(pattern, crosshatch = l$pattern_fill, "#4169E1")
     l$pattern_filter <- l$pattern_filter %||%
         switch(pattern, magick = "box", "lanczos")
-    l$pattern_gravity <- l$pattern_gravity %||% "center"
     l$pattern_grid <- l$pattern_grid %||% "square"
     l$pattern_key_scale_factor <- l$pattern_key_scale_factor %||% 1
     l$pattern_orientation <- l$pattern_orientation %||% "vertical"
@@ -41,6 +40,10 @@ get_params <- function(..., pattern = "none", prefix = "pattern_", gp = gpar()) 
         l$pattern_type <- default_pattern_type(pattern)
     l$pattern_xoffset <- l$pattern_xoffset %||% 0
     l$pattern_yoffset <- l$pattern_yoffset %||% 0
+    l$pattern_gravity <- l$pattern_gravity %||%
+        switch(l$pattern_type, tile = "southwest", "center")
+    if (is.na(l$pattern_gravity))
+        l$pattern_gravity <- switch(l$pattern_type, tile = "southwest", "center")
 
     l$pattern_res <- l$pattern_res %||% getOption("ggpattern_res", 72) # in PPI
 
@@ -60,7 +63,6 @@ get_params <- function(..., pattern = "none", prefix = "pattern_", gp = gpar()) 
     l$pattern_distance_ind <- l$pattern_distance_ind %||% c(1, 2)
     l$pattern_jitter <- l$pattern_jitter %||% 0.45
 
-
     l
 }
 
@@ -71,9 +73,16 @@ get_params <- function(..., pattern = "none", prefix = "pattern_", gp = gpar()) 
 #' the grid graphics features introduced in R v4.1.  If it guesses it does
 #' it returns `TRUE` else `FALSE`.
 #'
+#' @param features Character vector of features to guess support for.
+#'                 Will return `TRUE` only if guesses support for all requested features.\describe{
+#'                 \item{"clippingPaths"}{Supports clipping path feature}
+#'                 \item{"gradients"}{Supports (both linear and radial) gradient feature}
+#'                 \item{"masks"}{Supports (alpha) mask feature}
+#'                 \item{"patterns"}{Supports (tiling) pattern feature}
+#'                 }
 #' @seealso \url{https://www.stat.auckland.ac.nz/~paul/Reports/GraphicsEngine/definitions/definitions.html} for more info about the new grid graphics
 #'         features introduced in R v4.1.
-#' @return `TRUE` or `FALSE`
+#' @return `TRUE` if we guess all `features` are supported else `FALSE`
 #' @examples
 #'   # If R version (weakly) greater than 4.1 should be TRUE
 #'   pdf(tempfile(fileext = ".pdf"))
@@ -86,17 +95,21 @@ get_params <- function(..., pattern = "none", prefix = "pattern_", gp = gpar()) 
 #'   invisible(dev.off())
 #'
 #' @export
-guess_has_R4.1_features <- function() {
+guess_has_R4.1_features <- function(features = c("clippingPaths", "gradients", "masks", "patterns")) {
     if (getRversion() < '4.1.0')
         return (FALSE)
+
+    if (getRversion() >= '4.2.0' && guess_via_dev_capabilities(features))
+        return (TRUE)
 
     device <- names(grDevices::dev.cur())
     if (device %in% c("cairo_pdf", "cairo_ps", "pdf", "svg", "X11cairo")) {
         TRUE
     } else if (device %in% c("bmp", "jpeg", "png", "tiff")) {
-        switch(.Platform$OS.type,
-               windows = FALSE,
-               unix = isTRUE(capabilities("cairo")))
+        if (.Platform$OS.type == "windows") # could be `type = "windows"` or `type = "cairo"`
+            guess_via_dev_capabilities(features)
+        else # on unix non-"cairo" type have different device names from "cairo" type
+           TRUE
     } else if (device %in% c("agg_jpeg", "agg_ppm", "agg_png", "agg_tiff")) {
         packageVersion("ragg") >= '1.2.0'
     } else if (device == "devSVG") {
@@ -112,9 +125,31 @@ guess_has_R4.1_features <- function() {
     }
 }
 
+# Will always return FALSE if called within R 4.1
+# or if graphics device hasn't been updated to provide this information
+# even if the device had been updated to provide R 4.1 graphic feature support
+guess_via_dev_capabilities <- function(features = c("clippingPaths", "gradients", "masks", "patterns")) {
+    guess <- TRUE
+    support <- dev.capabilities()
+
+    if (("clippingPaths" %in% features) && !isTRUE(support$clippingPaths))
+        guess <- FALSE
+    if (("gradients" %in% features) && !all(c("LinearGradient", "RadialGradient") %in% support$patterns))
+        guess <- FALSE
+    if (("masks" %in% features) && !("alpha" %in% support$masks))
+        guess <- FALSE
+    if (("patterns" %in% features) && !("TilingPattern" %in% support$patterns))
+        guess <- FALSE
+
+    guess
+}
+
 # `vdiffr::write_svg()` is the function that calls the embedded {svglite}
 # but when `vdiffr::expect_doppelganger()` calls it its call is "writer"
 likely_called_by_vdiffr <- function() {
+    if (!requireNamespace("svglite", quietly = TRUE))
+        return (TRUE)
+
     n <- sys.nframe()
     while(n > 0) {
         call <- as.character(sys.call(n))
@@ -127,23 +162,22 @@ likely_called_by_vdiffr <- function() {
 
 get_R4.1_params <- function(l) {
     # R 4.1 features
-    default <- guess_has_R4.1_features()
     l$pattern_use_R4.1_clipping <- l$pattern_use_R4.1_clipping %||%
         getOption("ggpattern_use_R4.1_clipping") %||%
         getOption("ggpattern_use_R4.1_features") %||%
-        default
+        guess_has_R4.1_features("clippingPaths")
     l$pattern_use_R4.1_gradients <- l$pattern_use_R4.1_gradients %||%
         getOption("ggpattern_use_R4.1_gradients") %||%
         getOption("ggpattern_use_R4.1_features") %||%
-        default
+        guess_has_R4.1_features("gradients")
     l$pattern_use_R4.1_masks <- l$pattern_use_R4.1_masks %||%
         getOption("ggpattern_use_R4.1_masks") %||%
         getOption("ggpattern_use_R4.1_features") %||%
-        default
+        guess_has_R4.1_features("masks")
     l$pattern_use_R4.1_patterns <- l$pattern_use_R4.1_patterns %||%
         getOption("ggpattern_use_R4.1_patterns") %||%
         getOption("ggpattern_use_R4.1_features") %||%
-        default
+        guess_has_R4.1_features("patterns")
     l
 }
 
