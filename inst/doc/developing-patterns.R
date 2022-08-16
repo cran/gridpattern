@@ -36,7 +36,7 @@ create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = F
                      col = params$pattern_colour,
                      fill = params$pattern_fill,
                      lty = params$pattern_linetype,
-                     lwd = params$pattern_size)
+                     lwd = params$pattern_linewidth)
 
     grid::polygonGrob(x = x, y = y, id = id, default.units = "npc", gp = gp)
 }

@@ -26,6 +26,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -289,78 +290,84 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>linetype</td>
 </tr>
 <tr class="even">
+<td><code>pattern_linewidth</code></td>
+<td>Stroke linewidth</td>
+<td>1</td>
+<td>linewidth</td>
+</tr>
+<tr class="odd">
 <td><code>pattern_option_1 - 5</code></td>
 <td>Generic options for expansion</td>
 <td>0</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pattern_orientation</code></td>
 <td>Orientation</td>
 <td>‘vertical’</td>
 <td>‘vertical’, ‘horizontal’, ‘radial’</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pattern_phase</code></td>
 <td>Phase</td>
 <td>0</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pattern_res</code></td>
 <td>Pattern resolution (pixels per inch)</td>
 <td>NA</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pattern_rot</code></td>
 <td>Rotation angle (shape within pattern)</td>
 <td>0</td>
 <td>angle in degrees</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pattern_scale</code></td>
 <td>Scale</td>
 <td>1</td>
 <td>Multiplier</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pattern_shape</code></td>
 <td>Plotting shape</td>
 <td>1</td>
 <td>shapes</td>
 </tr>
-<tr class="odd">
-<td><code>pattern_size</code></td>
-<td>Stroke linewidth</td>
-<td>1</td>
-<td>linewidth</td>
-</tr>
 <tr class="even">
+<td><code>pattern_size</code></td>
+<td>Size factor (e.g. fontsize)</td>
+<td>1</td>
+<td>fontsize</td>
+</tr>
+<tr class="odd">
 <td><code>pattern_spacing</code></td>
 <td>Spacing between repetitions of pattern</td>
 <td>0.05</td>
 <td>value in range [0, 1] (snpc units)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pattern_subtype</code></td>
 <td>Generic control option</td>
 <td>NA</td>
 <td>pattern-dependent</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pattern_type</code></td>
 <td>Generic control option</td>
 <td>NA</td>
 <td>pattern-dependent</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pattern_xoffset</code></td>
 <td>Shift pattern along x axis</td>
 <td>0</td>
 <td>value in range [0, 1] (snpc units)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pattern_yoffset</code></td>
 <td>Shift pattern along y axis</td>
 <td>0</td>
@@ -489,7 +496,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col =</span> params<span class="sc">$</span>pattern_colour,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill =</span> params<span class="sc">$</span>pattern_fill,</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">lty =</span> params<span class="sc">$</span>pattern_linetype,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">lwd =</span> params<span class="sc">$</span>pattern_size)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">lwd =</span> params<span class="sc">$</span>pattern_linewidth)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    grid<span class="sc">::</span><span class="fu">polygonGrob</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">id =</span> id, <span class="at">default.units =</span> <span class="st">&quot;npc&quot;</span>, <span class="at">gp =</span> gp)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
