@@ -1,7 +1,7 @@
 Package: gridpattern
 Type: Package
 Title: 'grid' Pattern Grobs
-Version: 1.0.2
+Version: 1.1.0
 Authors@R: c(person("Mike", "FC", role = "aut", comment = "Code/docs adapted from ggpattern"),
         person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com",
                comment = c(ORCID = "0000-0001-6341-4639")),
@@ -12,17 +12,17 @@ URL: https://trevorldavis.com/R/gridpattern/,
 BugReports: https://github.com/trevorld/gridpattern/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Depends: R (>= 3.4.0)
 Imports: glue, grDevices, grid, memoise, png, rlang, sf, utils
-Suggests: ambient, knitr, magick, ragg (>= 1.2.0), rmarkdown, svglite
-        (>= 2.1.0), testthat, vdiffr
+Suggests: ambient, knitr, magick (>= 2.7.4), ragg (>= 1.2.0),
+        rmarkdown, svglite (>= 2.1.0), testthat, vdiffr (>= 1.0.6)
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2022-11-07 20:50:10 UTC; trevor
+Packaged: 2023-10-03 05:50:57 UTC; trevorld
 Author: Mike FC [aut] (Code/docs adapted from ggpattern),
   Trevor L Davis [aut, cre] (<https://orcid.org/0000-0001-6341-4639>),
   Thomas Lin Pedersen [ctb] (new_data_frame() copied from ggplot2)
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-11-07 21:50:02 UTC
+Date/Publication: 2023-10-03 06:40:02 UTC

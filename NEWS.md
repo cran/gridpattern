@@ -1,3 +1,25 @@
+gridpattern v1.1.0
+==================
+
+New Features
+------------
+
+* `reset_image_cache()` resets the image cache used by `grid.pattern_image()` 
+   and `grid.pattern_placeholder()` to store images (#63).
+
+Bug fixes and minor improvements
+--------------------------------
+
+* The function `guess_has_R4.1_features()` is now available as a "standalone" file.
+  You may copy its source under the permissive [MIT No Attribution (MIT-0)](https://spdx.org/licenses/MIT-0.html) 
+  license into your own R package
+  by either using `usethis::use_standalone("trevorld/gridpattern", "standalone-guess_has_R4.1_features.R")`
+  or simply copying `standalone-guess_has_R4.1_features.R` into your `R` directory and 
+  adding `grDevices` and `utils` to the `Imports` of your `DESCRIPTION` file.
+* If `{vdiffr}` has been updated to at least v1.0.6 (released 2023-08-25) then
+  `guess_has_R4.1_features()` should now always correctly guess R4.1 feature support for the
+  `svglite::svglite()` and `vdiffr:::svglite()` graphics devices.
+
 gridpattern v1.0.2
 ==================
 
