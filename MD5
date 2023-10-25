@@ -1,7 +1,7 @@
-807a299d5937ed322ed58bc6b133208c *DESCRIPTION
+5c1dc6b0ce56a69e59284d8c3f2e9e11 *DESCRIPTION
 f5368039cbd886bafc5b10fb9160252f *LICENSE
 647b91d439ce92edecf94dc93e12550a *NAMESPACE
-ab1472f89b52f4058aee24723abc2aa8 *NEWS.md
+e2008c53866f6b8b197a1027f41b1880 *NEWS.md
 970bd5ba50d175bd1efbeeb9330129dc *R/alphaMaskGrob.R
 ea3ca0de46bc3533cb99f33dc5f95dbe *R/clippingPathGrob.R
 52c18d1f7c5a7759b9cb52128c16cbfd *R/grid-pattern.R
@@ -14,7 +14,7 @@ d2b177643d7d87d9111245b57fd1f368 *R/pattern-array-image.R
 4b538e022d94c18ef16fdc888de4bb54 *R/pattern-array-plasma.R
 2bc88a2d1e8200cf988cf3e75c8e1588 *R/pattern-both-gradient.R
 9075470ca9acf5eeed33d6204b67069c *R/pattern-both-rose.R
-b9504bd25f0b942553f75f5dabc75b63 *R/pattern-both-text.R
+427b1211fa6b94b43236b1538140cc4c *R/pattern-both-text.R
 91859e757a07efb20a24b6726c91d07a *R/pattern-geometry-circle.R
 3a897f9407d9d074edd903c18b09813d *R/pattern-geometry-crosshatch.R
 571fdfc17b77700fc6628bf403beddf4 *R/pattern-geometry-none.R
@@ -39,7 +39,7 @@ c156e59a58e089a8fc95ab9e7bb98acf *R/utils-magick-fill.R
 799d929df8dec7710acd5602c2b373e1 *R/utils-magick-misc.R
 650478fc91f08ec58bbdef8841aba024 *R/utils-magick-pattern.R
 d87ca4a61463a57788e524e4451143a2 *R/utils-magick-read.R
-1c2d6ee9a615f2c74ba309526e3a1428 *R/utils-misc.R
+91a284eba46ec4a3f05420808ca95cc7 *R/utils-misc.R
 ab2c97aa6f15c4d81b0ec33437311aaf *R/utils-params.R
 473f72d3e046b41576662d02f346377e *R/utils-polygon_df.R
 f4455c36269fefd58167f01410e55085 *R/utils-sf.R
@@ -84,7 +84,7 @@ d51fc689857090ff2a1fbda3afbbd894 *man/grid.pattern_placeholder.Rd
 0ebbb4c387966f0bd71c3ac641992288 *man/grid.pattern_regular_polygon.Rd
 b0a6c713c2b58b53b906823cf338fb72 *man/grid.pattern_rose.Rd
 7c95db6ca5723a75b39f4e18d5687e26 *man/grid.pattern_stripe.Rd
-fc56a7f8da748e4ba14647f76ea694f3 *man/grid.pattern_text.Rd
+295789e80ff0fa5506e4b19f6bdf007e *man/grid.pattern_text.Rd
 ae90e89e6cf2b8515ed0b7682e47a807 *man/grid.pattern_wave.Rd
 e4a1b8bb8446f43b013592b185fc6c2a *man/grid.pattern_weave.Rd
 191799036df8c431d67b3cf1dacf6282 *man/gridpattern-package.Rd
