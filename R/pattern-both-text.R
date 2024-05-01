@@ -11,14 +11,12 @@
 #' @param fontface The font face.  See [grid::gpar()] for more details.
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#' if (require("grid") &&
-#'     capabilities("png") &&
+#' if (capabilities("png") &&
 #'     gridpattern:::device_supports_unicode()) {
 #'   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'
 #'   playing_card_symbols <- c("\u2660", "\u2665", "\u2666", "\u2663")
-#'   grid.newpage()
 #'   grid.pattern_text(x_hex, y_hex,
 #'                    shape = playing_card_symbols,
 #'                    colour = c("black", "red", "red", "black"),
@@ -29,7 +27,7 @@ grid.pattern_text <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...
                               colour = gp$col %||% "grey20",
                               angle = 30,
                               spacing = 0.05,
-                              xoffset = 0, yoffset = 0,
+                              xoffset = 0, yoffset = 0, units = "snpc",
                               scale = 0.5,
                               shape = "X",
                               grid = "square", type = NULL, subtype = NULL, rot = 0,
@@ -45,7 +43,7 @@ grid.pattern_text <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("text", x, y, id,
                  colour = colour, angle = angle,
-                 spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  scale = scale, shape = shape,
                  grid = grid, type = type, subtype = subtype, rot = rot,
                  alpha = alpha, size = size, fontfamily = fontfamily, fontface = fontface,
@@ -67,7 +65,7 @@ create_pattern_text <- function(params, boundary_df, aspect_ratio, legend = FALS
     grid_xy <- get_xy_grid(params, vpm)
 
     # vectorize fill, col, lwd, lty, density, rot, and shape
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    col  <- update_alpha_col(params$pattern_colour, params$pattern_alpha)
     fontsize  <- params$pattern_size
     fontfamily <- params$pattern_fontfamily
     fontface <- params$pattern_fontface
@@ -77,12 +75,12 @@ create_pattern_text <- function(params, boundary_df, aspect_ratio, legend = FALS
 
     n_par <- max(lengths(list(col, fontsize, fontfamily, fontface, rot, shape)))
 
-    col <- rep(col, length.out = n_par)
-    fontsize <- rep(fontsize, length.out = n_par)
-    fontfamily <- rep(fontfamily, length.out = n_par)
-    fontface <- rep(fontface, length.out = n_par)
-    rot <- rep(rot, length.out = n_par)
-    shape <- rep(shape, length.out = n_par)
+    col <- rep_len(col, n_par)
+    fontsize <- rep_len(fontsize, n_par)
+    fontfamily <- rep_len(fontfamily, n_par)
+    fontface <- rep_len(fontface, n_par)
+    rot <- rep_len(rot, n_par)
+    shape <- rep_len(shape, n_par)
 
     # compute pattern matrix of graphical elements (e.g. fill colors)
     if (is.null(params$pattern_type) || is.na(params$pattern_type))

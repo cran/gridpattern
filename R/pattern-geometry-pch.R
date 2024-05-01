@@ -10,42 +10,46 @@
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @seealso [grid.pattern_regular_polygon()] which is used to implement this pattern.
 #' @examples
-#'   if (require("grid")) {
-#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     gp <- gpar(col = "black", fill = "lightblue")
+#' x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' gp <- grid::gpar(col = "black", fill = "lightblue")
 #'
-#'     # pch 0-6 are simple shapes with no fill
-#'     grid.pattern_pch(x_hex, y_hex, shape = 0:6, gp = gp,
-#'                      spacing = 0.1, density = 0.4, angle = 0)
-#'
-#'     # pch 7-14 are compound shapes with no fill
-#'     grid.newpage()
-#'     grid.pattern_pch(x_hex, y_hex, shape = 7:14, gp = gp,
-#'                      spacing = 0.1, density = 0.4, angle = 0)
-#'
-#'     # pch 15-20 are filled with 'col'
-#'     grid.newpage()
-#'     grid.pattern_pch(x_hex, y_hex, shape = 15:20, gp = gp,
-#'                      spacing = 0.1, density = 0.4, angle = 0)
-#'
-#'     # pch 21-25 are filled with 'fill'
-#'     grid.newpage()
-#'     grid.pattern_pch(x_hex, y_hex, shape = 21:25, gp = gp,
-#'                      spacing = 0.1, density = 0.4, angle = 0)
-#'
-#'     # using a 'basket' weave `type` with two shapes
-#'     grid.newpage()
-#'     grid.pattern_pch(x_hex, y_hex, shape = c(1,4), gp = gp,
-#'                      type = "basket",
-#'                      spacing = 0.1, density = 0.4, angle = 0)
-#'   }
+#' if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'   # pch 0-6 are simple shapes with no fill
+#'   grid.pattern_pch(x_hex, y_hex, shape = 0:6, gp = gp,
+#'                    spacing = 0.1, density = 0.4, angle = 0)
+#' }
+#' if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'   # pch 7-14 are compound shapes with no fill
+#'   grid::grid.newpage()
+#'   grid.pattern_pch(x_hex, y_hex, shape = 7:14, gp = gp,
+#'                    spacing = 0.1, density = 0.4, angle = 0)
+#' }
+#' if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'   # pch 15-20 are filled with 'col'
+#'   grid::grid.newpage()
+#'   grid.pattern_pch(x_hex, y_hex, shape = 15:20, gp = gp,
+#'                    spacing = 0.1, density = 0.4, angle = 0)
+#' }
+#' if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'   # pch 21-25 are filled with 'fill'
+#'   grid::grid.newpage()
+#'   grid.pattern_pch(x_hex, y_hex, shape = 21:25, gp = gp,
+#'                    spacing = 0.1, density = 0.4, angle = 0)
+#' }
+#' if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'   # using a 'basket' weave `type` with two shapes
+#'   grid::grid.newpage()
+#'   grid.pattern_pch(x_hex, y_hex, shape = c(1,4), gp = gp,
+#'                    type = "basket",
+#'                    spacing = 0.1, density = 0.4, angle = 0)
+#' }
 #' @export
 grid.pattern_pch <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                          colour = gp$col %||% "grey20",
                                          fill = gp$fill %||% "grey80",
                                          angle = 30, density = 0.2,
-                                         spacing = 0.05, xoffset = 0, yoffset = 0,
+                                         spacing = 0.05, xoffset = 0, yoffset = 0, units = "snpc",
                                          scale = 0.5, shape = 1L,
                                          grid = "square", type = NULL, subtype = NULL, rot = 0,
                                          alpha = gp$alpha %||% NA_real_,
@@ -57,7 +61,7 @@ grid.pattern_pch <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("pch", x, y, id,
                  colour = colour, fill = fill, angle = angle,
-                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  scale = scale, shape = shape,
                  grid = grid, type = type, subtype = subtype, rot = rot,
                  alpha = alpha, linetype = linetype, linewidth = linewidth,
@@ -67,8 +71,8 @@ grid.pattern_pch <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
 # each pch will be represented by two regular polygons (although one may be "null")
 create_pattern_pch <- function(params, boundary_df, aspect_ratio, legend = FALSE) {
     # vectorize fill, col, lwd, lty, density, rot, and shape
-    fill <- alpha(params$pattern_fill, params$pattern_alpha)
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill, params$pattern_alpha)
+    col  <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd  <- params$pattern_linewidth
     lty  <- params$pattern_linetype
     params$pattern_alpha <- NA_real_
@@ -79,13 +83,13 @@ create_pattern_pch <- function(params, boundary_df, aspect_ratio, legend = FALSE
 
     n_par <- max(lengths(list(fill, col, lwd, lty, density, rot, shape)))
 
-    fill <- rep(fill, length.out = n_par)
-    col <- rep(col, length.out = n_par)
-    lwd <- rep(lwd, length.out = n_par)
-    lty <- rep(lty, length.out = n_par)
-    density <- rep(density, length.out = n_par)
-    rot <- rep(rot, length.out = n_par)
-    shape <- rep(shape, length.out = n_par)
+    fill <- rep_len_fill(fill, n_par)
+    col <- rep_len(col, n_par)
+    lwd <- rep_len(lwd, n_par)
+    lty <- rep_len(lty, n_par)
+    density <- rep_len(density, n_par)
+    rot <- rep_len(rot, n_par)
+    shape <- rep_len(shape, n_par)
 
     # setup bottom and top regular polygons
     pint <- as.integer(shape)

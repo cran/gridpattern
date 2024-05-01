@@ -3,32 +3,30 @@
 #' `grid.pattern_wave()` draws a wave pattern onto the graphic device.
 #'
 #' @inheritParams grid.pattern_circle
-#' @param amplitude Wave amplitude (\dQuote{snpc} units)
-#' @param frequency Linear frequency (inverse \dQuote{snpc} units)
+#' @param units [grid::unit()] units for `amplitude`, `frequency`, `spacing`, `xoffset`, and `yoffset` parameters.
+#' @param amplitude Wave amplitude (in `units` units)
+#' @param frequency Linear frequency (in inverse `units` units)
 #' @param type Either \dQuote{sine} or \dQuote{triangle} (default).
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   if (require("grid")) {
-#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     grid.newpage()
-#'     grid.pattern_wave(x_hex, y_hex, colour = "black", type = "sine",
-#'                       fill = c("red", "blue"), density = 0.4,
-#'                       spacing = 0.15, angle = 0,
-#'                       amplitude = 0.05, frequency = 1 / 0.20)
+#' x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' grid::grid.newpage()
+#' grid.pattern_wave(x_hex, y_hex, colour = "black", type = "sine",
+#'                   fill = c("red", "blue"), density = 0.4,
+#'                   spacing = 0.15, angle = 0,
+#'                   amplitude = 0.05, frequency = 1 / 0.20)
 #'
-#'     # zig-zag pattern is a wave of `type` "triangle"
-#'     grid.newpage()
-#'     grid.pattern_wave(x_hex, y_hex, colour = "black", type = "triangle",
-#'                         fill = c("red", "blue"), density = 0.4,
-#'                         spacing = 0.15, angle = 0, amplitude = 0.075)
-#'
-#'   }
+#' # zig-zag pattern is a wave of `type` "triangle"
+#' grid::grid.newpage()
+#' grid.pattern_wave(x_hex, y_hex, colour = "black", type = "triangle",
+#'                     fill = c("red", "blue"), density = 0.4,
+#'                     spacing = 0.15, angle = 0, amplitude = 0.075)
 #' @seealso Use [grid.pattern_stripe()] for straight lines instead of waves.
 #' @export
 grid.pattern_wave <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                 colour = gp$col %||% "grey20", fill = gp$fill %||% "grey80", angle = 30,
-                                density = 0.2, spacing = 0.05, xoffset = 0, yoffset = 0,
+                                density = 0.2, spacing = 0.05, xoffset = 0, yoffset = 0, units = "snpc",
                                 amplitude = 0.5 * spacing, frequency = 1 / spacing,
                                 alpha = gp$alpha %||% NA_real_,
                                 linetype = gp$lty %||% 1,
@@ -39,7 +37,7 @@ grid.pattern_wave <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("wave", x, y, id,
                  colour = colour, fill = fill, angle = angle,
-                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  amplitude = amplitude, frequency = frequency,
                  alpha = alpha, linetype = linetype, linewidth = linewidth,
                  grid = grid, type = type,
@@ -60,26 +58,26 @@ create_pattern_wave_via_sf <- function(params, boundary_df, aspect_ratio,
     vpm <- get_vp_measurements(default.units)
 
     # create grid of points large enough to cover viewport no matter the angle
-    grid_xy <- get_xy_grid(params, vpm)
+    grid_xy <- get_xy_grid(params, vpm, wavelength = TRUE)
 
-    fill <- alpha(params$pattern_fill, params$pattern_alpha)
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill, params$pattern_alpha)
+    col  <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd  <- params$pattern_linewidth * .pt
     lty  <- params$pattern_linetype
     density <- params$pattern_density
 
     n_par <- max(lengths(list(fill, col, lwd, lty, density)))
 
-    fill <- rep(fill, length.out = n_par)
-    col <- rep(col, length.out = n_par)
-    lwd <- rep(lwd, length.out = n_par)
-    lty <- rep(lty, length.out = n_par)
-    density <- rep(density, length.out = n_par)
+    fill <- rep_len_fill(fill, n_par)
+    col <- rep_len(col, n_par)
+    lwd <- rep_len(lwd, n_par)
+    lty <- rep_len(lty, n_par)
+    density <- rep_len(density, n_par)
 
     gl <- gList()
     for (i_par in seq_len(n_par)) {
 
-        gp <- gpar(col = col[i_par], fill = fill[i_par],
+        gp <- gpar(col = col[i_par], fill = fill[[i_par]],
                    lwd = lwd[i_par], lty = lty[i_par], lineend = 'square')
 
         boundary_sf <- convert_polygon_df_to_polygon_sf(boundary_df, buffer_dist = 0)

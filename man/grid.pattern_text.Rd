@@ -14,6 +14,7 @@ grid.pattern_text(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   scale = 0.5,
   shape = "X",
   grid = "square",
@@ -43,17 +44,19 @@ grid.pattern_text(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{scale}{For star polygons, multiplier (between 0 and 1)
 applied to exterior radius to get interior radius.}
@@ -120,14 +123,12 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_text()} draws a text character pattern onto the graphic device.
 }
 \examples{
-if (require("grid") &&
-    capabilities("png") &&
+if (capabilities("png") &&
     gridpattern:::device_supports_unicode()) {
   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 
   playing_card_symbols <- c("\u2660", "\u2665", "\u2666", "\u2663")
-  grid.newpage()
   grid.pattern_text(x_hex, y_hex,
                    shape = playing_card_symbols,
                    colour = c("black", "red", "red", "black"),

@@ -33,13 +33,13 @@ grid.pattern_gradient(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{fill}{Fill colour}
+\item{fill}{Colour.}
 
-\item{fill2}{Second colour}
+\item{fill2}{Second colour.}
 
-\item{orientation}{vertical, horizontal, or radial}
+\item{orientation}{vertical, horizontal, or radial.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
@@ -47,9 +47,9 @@ All locations within the same \code{id} belong to the same boundary.}
 or use a \code{rasterGrob} approximation.
 Note not all graphic devices support the grid gradient feature.}
 
-\item{aspect_ratio}{Override aspect ratio}
+\item{aspect_ratio}{Override aspect ratio.}
 
-\item{key_scale_factor}{Additional scale factor for legend}
+\item{key_scale_factor}{Additional scale factor for legend.}
 
 \item{res}{Assumed resolution (in pixels per graphic device inch) to use when creating array pattern.}
 
@@ -74,11 +74,13 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_gradient()} draws a gradient pattern onto the graphic device.
 }
 \examples{
- if (require("grid") && require("magick") && capabilities("png")) {
+ if (requireNamespace("magick") && capabilities("png")) {
    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
    grid.pattern_gradient(x_hex, y_hex, fill = "green")
-   grid.newpage()
+ }
+ if (requireNamespace("magick") && capabilities("png")) {
+   grid::grid.newpage()
    grid.pattern_gradient(x_hex, y_hex, fill = "green", orientation = "radial")
  }
 }

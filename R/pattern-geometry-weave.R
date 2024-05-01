@@ -9,37 +9,34 @@
 #' @param subtype The weave subtype.  See [pattern_weave()] for more details.
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   if (require("grid")) {
-#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     gp <- gpar(colour = "black", fill = "lightblue", lwd=0.5)
+#' x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' gp <- grid::gpar(colour = "black", fill = "lightblue", lwd=0.5)
 #'
-#'     # Plain weave (default weave)
-#'     grid.pattern_weave(x_hex, y_hex, fill2 = "yellow",
-#'                        gp = gp, spacing = 0.1, density = 0.3)
+#' # Plain weave (default weave)
+#' grid.pattern_weave(x_hex, y_hex, fill2 = "yellow",
+#'                    gp = gp, spacing = 0.1, density = 0.3)
 #'
-#'     # Irregular matt weave
-#'     grid.newpage()
-#'     grid.pattern_weave(x_hex, y_hex,  type = "matt_irregular",
-#'                        fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
+#' # Irregular matt weave
+#' grid::grid.newpage()
+#' grid.pattern_weave(x_hex, y_hex,  type = "matt_irregular",
+#'                    fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
 #'
-#'     # Twill weave
-#'     grid.newpage()
-#'     grid.pattern_weave(x_hex, y_hex, type = "twill",
-#'                        fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
+#' # Twill weave
+#' grid::grid.newpage()
+#' grid.pattern_weave(x_hex, y_hex, type = "twill",
+#'                    fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
 #'
-#'     # Zig-zag twill
-#'     grid.newpage()
-#'     grid.pattern_weave(x_hex, y_hex, type = "twill_zigzag",
-#'                        fill2 = "yellow", gp = gp, spacing = 0.05, density = 0.7)
+#' # Zig-zag twill
+#' grid::grid.newpage()
+#' grid.pattern_weave(x_hex, y_hex, type = "twill_zigzag",
+#'                    fill2 = "yellow", gp = gp, spacing = 0.05, density = 0.7)
 #'
-#'     # Herringbone twill with density 1
-#'     grid.newpage()
-#'     gp$col <- NA
-#'     grid.pattern_weave(x_hex, y_hex, type = "twill_herringbone",
-#'                        fill2 = "yellow", gp = gp, spacing = 0.05, density = 1.0)
-#'
-#'   }
+#' # Herringbone twill with density 1
+#' grid::grid.newpage()
+#' gp$col <- NA
+#' grid.pattern_weave(x_hex, y_hex, type = "twill_herringbone",
+#'                    fill2 = "yellow", gp = gp, spacing = 0.05, density = 1.0)
 #' @seealso [pattern_weave()]
 #' @export
 grid.pattern_weave <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
@@ -86,8 +83,8 @@ create_warp_via_sf <- function(params, boundary_df) {
     # create grid of points large enough to cover viewport no matter the angle
     grid_xy <- get_xy_grid(params, vpm)
 
-    fill <- alpha(params$pattern_fill2, params$pattern_alpha)
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill2, params$pattern_alpha)
+    col  <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd  <- params$pattern_linewidth * .pt
     lty  <- params$pattern_linetype
     gp <- gpar(col = col, fill = fill, lwd = lwd, lty = lty, lineend = 'square')

@@ -39,31 +39,31 @@ grid.pattern_weave(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
 \item{fill}{The fill colour for the horizontal "weft" lines.}
 
 \item{fill2}{The fill colour for the vertical "warp" lines.}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{grid}{Adjusts placement and density of certain graphical elements.
 \code{"square"} (default) is a square grid.
@@ -96,37 +96,34 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_weave()} draws a weave pattern onto the graphic device.
 }
 \examples{
-  if (require("grid")) {
-    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    gp <- gpar(colour = "black", fill = "lightblue", lwd=0.5)
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+gp <- grid::gpar(colour = "black", fill = "lightblue", lwd=0.5)
 
-    # Plain weave (default weave)
-    grid.pattern_weave(x_hex, y_hex, fill2 = "yellow",
-                       gp = gp, spacing = 0.1, density = 0.3)
+# Plain weave (default weave)
+grid.pattern_weave(x_hex, y_hex, fill2 = "yellow",
+                   gp = gp, spacing = 0.1, density = 0.3)
 
-    # Irregular matt weave
-    grid.newpage()
-    grid.pattern_weave(x_hex, y_hex,  type = "matt_irregular",
-                       fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
+# Irregular matt weave
+grid::grid.newpage()
+grid.pattern_weave(x_hex, y_hex,  type = "matt_irregular",
+                   fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
 
-    # Twill weave
-    grid.newpage()
-    grid.pattern_weave(x_hex, y_hex, type = "twill",
-                       fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
+# Twill weave
+grid::grid.newpage()
+grid.pattern_weave(x_hex, y_hex, type = "twill",
+                   fill2 = "yellow", gp = gp, spacing = 0.1, density = 0.3)
 
-    # Zig-zag twill
-    grid.newpage()
-    grid.pattern_weave(x_hex, y_hex, type = "twill_zigzag",
-                       fill2 = "yellow", gp = gp, spacing = 0.05, density = 0.7)
+# Zig-zag twill
+grid::grid.newpage()
+grid.pattern_weave(x_hex, y_hex, type = "twill_zigzag",
+                   fill2 = "yellow", gp = gp, spacing = 0.05, density = 0.7)
 
-    # Herringbone twill with density 1
-    grid.newpage()
-    gp$col <- NA
-    grid.pattern_weave(x_hex, y_hex, type = "twill_herringbone",
-                       fill2 = "yellow", gp = gp, spacing = 0.05, density = 1.0)
-
-  }
+# Herringbone twill with density 1
+grid::grid.newpage()
+gp$col <- NA
+grid.pattern_weave(x_hex, y_hex, type = "twill_herringbone",
+                   fill2 = "yellow", gp = gp, spacing = 0.05, density = 1.0)
 }
 \seealso{
 \code{\link[=pattern_weave]{pattern_weave()}}

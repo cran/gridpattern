@@ -19,8 +19,6 @@ test_that("geometry patterns work as expected", {
 
     expect_doppelganger("default", grid.pattern)
 
-    expect_doppelganger("none", function() grid.pattern("none"))
-
     x <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     y <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     expect_doppelganger("circle", function()
@@ -28,6 +26,12 @@ test_that("geometry patterns work as expected", {
 
     expect_doppelganger("crosshatch", function()
         grid.pattern_crosshatch(x, y, color="black", fill="blue", fill2="yellow", density = 0.5))
+
+    expect_doppelganger("fill", function()
+        grid.pattern_fill(x, y, fill = "blue", alpha = 0.5))
+
+    expect_doppelganger("none", function()
+        grid.pattern_none(x, y))
 
     expect_error(assert_rp_shape(1), "Unknown shape 1")
     expect_null(assert_rp_shape(c("square", "convex4")))
@@ -59,7 +63,7 @@ test_that("geometry patterns work as expected", {
         grid.pattern_wave(x, y, colour = "black", type = "sine",
                           fill = c("red", "blue"), density = 0.4,
                           spacing = 0.15, angle = 0,
-                          amplitude = 0.05, frequency = 1 / 0.20))
+                          amplitude = 0.05, frequency = 1 / 0.15))
 
     expect_doppelganger("wave_triangle", function()
         grid.pattern_wave(x, y, color="black", fill="yellow",
@@ -77,7 +81,7 @@ test_that("geometry patterns work as expected", {
                          pch  = params$pattern_shape,
                          size = unit(params$pattern_size, 'char'),
                          default.units = "npc",
-                         gp   = grid::gpar(col = alpha(params$pattern_fill, params$pattern_alpha))
+                         gp   = grid::gpar(col = update_alpha(params$pattern_fill, params$pattern_alpha))
         )
     }
     options(ggpattern_geometry_funcs = list(centroid = centroid_dot_pattern))

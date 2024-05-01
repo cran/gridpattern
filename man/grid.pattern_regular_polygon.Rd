@@ -16,6 +16,7 @@ grid.pattern_regular_polygon(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   scale = 0.5,
   shape = "convex4",
   grid = "square",
@@ -41,21 +42,23 @@ grid.pattern_regular_polygon(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{scale}{For star polygons, multiplier (between 0 and 1)
 applied to exterior radius to get interior radius.}
@@ -91,11 +94,11 @@ more information about supported \code{subtype} arguments.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{default.units}{A string indicating the default units to use if \code{x} or \code{y}
 are only given as numeric vectors.}
@@ -118,50 +121,46 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_regular_polygon()} draws a regular polygon pattern onto the graphic device.
 }
 \examples{
-  if (require("grid")) {
-    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 
-    # 'density', 'rot', and 'shape' are vectorized
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, colour = "black",
-                                 fill = c("blue", "yellow", "red"),
-                                 shape = c("convex4", "star8", "circle"),
-                                 density = c(0.45, 0.42, 0.4),
-                                 spacing = 0.08, angle = 0)
+# 'density', 'rot', and 'shape' are vectorized
+grid.pattern_regular_polygon(x_hex, y_hex, colour = "black",
+                             fill = c("blue", "yellow", "red"),
+                             shape = c("convex4", "star8", "circle"),
+                             density = c(0.45, 0.42, 0.4),
+                             spacing = 0.08, angle = 0)
 
-    # checker pattern using "square" shape
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, shape = "square",
-                                 colour = "transparent",
-                                 fill = c("black", "red", "blue", "yellow"),
-                                 angle = 0, density = 1.0, spacing = 0.2)
+# checker pattern using "square" shape
+grid::grid.newpage()
+grid.pattern_regular_polygon(x_hex, y_hex, shape = "square",
+                             colour = "transparent",
+                             fill = c("black", "red", "blue", "yellow"),
+                             angle = 0, density = 1.0, spacing = 0.2)
 
-    # checker pattern using the default "convex4" shape
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, density = 1.0,
-                                 colour = "black", fill = "blue")
+# checker pattern using the default "convex4" shape
+grid::grid.newpage()
+grid.pattern_regular_polygon(x_hex, y_hex, density = 1.0,
+                             colour = "black", fill = "blue")
 
-    # using a "twill_zigzag" 'weave' pattern
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, fill = c("blue", "yellow"),
-                                 shape = c("circle", "star8"),
-                                 density = c(0.5, 0.6), type = "twill_zigzag")
+# using a "twill_zigzag" 'weave' pattern
+grid::grid.newpage()
+grid.pattern_regular_polygon(x_hex, y_hex, fill = c("blue", "yellow"),
+                             shape = c("circle", "star8"),
+                             density = c(0.5, 0.6), type = "twill_zigzag")
 
-    # hexagon tiling
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, color = "transparent",
-                                 fill = c("white", "grey", "black"),
-                                 density = 1.0, spacing = 0.1,
-                                 shape = "convex6", grid = "hex")
+# hexagon tiling
+grid::grid.newpage()
+grid.pattern_regular_polygon(x_hex, y_hex, color = "transparent",
+                             fill = c("white", "grey", "black"),
+                             density = 1.0, spacing = 0.1,
+                             shape = "convex6", grid = "hex")
 
-    # triangle tiling
-    grid.newpage()
-    grid.pattern_regular_polygon(x_hex, y_hex, fill = "green",
-                                 density = 1.0, spacing = 0.1,
-                                 shape = "convex3", grid = "hex")
-
-  }
+# triangle tiling
+grid::grid.newpage()
+grid.pattern_regular_polygon(x_hex, y_hex, fill = "green",
+                             density = 1.0, spacing = 0.1,
+                             shape = "convex3", grid = "hex")
 }
 \seealso{
 \code{\link[=grid.pattern_circle]{grid.pattern_circle()}} for a special case of this pattern.

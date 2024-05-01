@@ -16,6 +16,7 @@ grid.pattern_rose(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   frequency = 0.1,
   grid = "square",
   type = NULL,
@@ -44,21 +45,23 @@ grid.pattern_rose(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{frequency}{The \dQuote{angular frequency} parameter of the rose pattern.}
 
@@ -80,11 +83,11 @@ more information about supported \code{subtype} arguments.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{use_R4.1_masks}{If \code{TRUE} use the grid mask feature introduced in R v4.1.0.
 If \code{FALSE} do a \code{rasterGrob} approximation.
@@ -121,20 +124,22 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_rose()} draws a rose curve pattern onto the graphic device.
 }
 \examples{
-  if (require("grid") && capabilities("png")) {
+  if (capabilities("png") || guess_has_R4.1_features("masks")) {
     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    gp <- gpar(fill = c("blue", "red", "yellow", "green"), col = "black")
-
-    grid.newpage()
+    gp <- grid::gpar(fill = c("blue", "red", "yellow", "green"), col = "black")
     grid.pattern_rose(x_hex, y_hex,
                       spacing = 0.15, density = 0.5, angle = 0,
                       frequency = 1:4, gp = gp)
-    grid.newpage()
+  }
+  if (capabilities("png") || guess_has_R4.1_features("masks")) {
+    grid::grid.newpage()
     grid.pattern_rose(x_hex, y_hex,
                       spacing = 0.15, density = 0.5, angle = 0,
                       frequency = 1/1:4, gp = gp)
-    grid.newpage()
+  }
+  if (capabilities("png") || guess_has_R4.1_features("masks")) {
+    grid::grid.newpage()
     grid.pattern_rose(x_hex, y_hex,
                       spacing = 0.18, density = 0.5, angle = 0,
                       frequency = c(3/2, 7/3, 5/4, 3/7), gp = gp)

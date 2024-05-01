@@ -33,7 +33,7 @@ grid.pattern_image(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
 \item{filename}{Image of filename or URL}
 
@@ -47,9 +47,9 @@ All locations within the same \code{id} belong to the same boundary.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{aspect_ratio}{Override aspect ratio}
+\item{aspect_ratio}{Override aspect ratio.}
 
-\item{key_scale_factor}{Additional scale factor for legend}
+\item{key_scale_factor}{Additional scale factor for legend.}
 
 \item{res}{Assumed resolution (in pixels per graphic device inch) to use when creating array pattern.}
 
@@ -93,7 +93,8 @@ Affected by \code{scale} and \code{gravity}.}
     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
     logo_filename <- system.file("img", "Rlogo.png" , package = "png")
     grid.pattern_image(x_hex, y_hex, filename = logo_filename, type = "fit")
-
+  }
+  if (requireNamespace("magick")) {
     # "tile" `type` image pattern depends on `magick` functionality
     # which is not reliable across platforms
     grid::grid.newpage()

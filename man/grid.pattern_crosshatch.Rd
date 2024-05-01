@@ -17,6 +17,7 @@ grid.pattern_crosshatch(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   alpha = gp$alpha \%||\% NA_real_,
   linetype = gp$lty \%||\% 1,
   linewidth = size \%||\% gp$lwd \%||\% 1,
@@ -37,31 +38,33 @@ grid.pattern_crosshatch(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
 \item{fill2}{The fill colour for the \dQuote{top} crosshatch lines.}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{grid}{Adjusts placement and density of certain graphical elements.
 \code{"square"} (default) is a square grid.
@@ -90,15 +93,13 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_crosshatch()} draws a crosshatch pattern onto the graphic device.
 }
 \examples{
-  if (require("grid")) {
-    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    grid.pattern_crosshatch(x_hex, y_hex, colour = "black", fill = "blue",
-                            fill2 = "yellow", density = 0.5)
-    grid.newpage()
-    grid.pattern_crosshatch(x_hex, y_hex, density = 0.3,
-                            gp = gpar(col = "blue", fill = "yellow"))
-  }
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+grid.pattern_crosshatch(x_hex, y_hex, colour = "black", fill = "blue",
+                        fill2 = "yellow", density = 0.5)
+grid::grid.newpage()
+grid.pattern_crosshatch(x_hex, y_hex, density = 0.3,
+                        gp = grid::gpar(col = "blue", fill = "yellow"))
 }
 \seealso{
 \code{\link[=grid.pattern_weave]{grid.pattern_weave()}} which interweaves two sets of lines.

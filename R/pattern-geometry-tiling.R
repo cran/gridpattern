@@ -56,38 +56,36 @@
 #'          information about these tilings as well as more
 #'          examples of polygon tiling using the [grid.pattern_regular_polygon()] function.
 #' @examples
-#'  print(names_polygon_tiling)
-#'  if (require("grid")) {
-#'    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'    gp1 <- gpar(fill = "yellow", col = "black")
-#'    gp2 <- gpar(fill = c("yellow", "red"), col = "black")
-#'    gp3 <- gpar(fill = c("yellow", "red", "blue"), col = "black")
+#' print(names_polygon_tiling)
 #'
-#'    grid.pattern_polygon_tiling(x_hex, y_hex, type = "herringbone", gp = gp1)
+#' x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' gp1 <- grid::gpar(fill = "yellow", col = "black")
+#' gp2 <- grid::gpar(fill = c("yellow", "red"), col = "black")
+#' gp3 <- grid::gpar(fill = c("yellow", "red", "blue"), col = "black")
 #'
-#'    grid.newpage()
-#'    grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal",
-#'                                spacing = 0.2, gp = gp3)
+#' grid.pattern_polygon_tiling(x_hex, y_hex, type = "herringbone", gp = gp1)
 #'
-#'    grid.newpage()
-#'    grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean",
-#'                                spacing = 0.2, gp = gp2)
+#' grid::grid.newpage()
+#' grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal",
+#'                             spacing = 0.2, gp = gp3)
 #'
-#'    grid.newpage()
-#'    grid.pattern_polygon_tiling(x_hex, y_hex, type = "snub_trihexagonal",
-#'                                spacing = 0.2, gp = gp3)
+#' grid::grid.newpage()
+#' grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean",
+#'                             spacing = 0.2, gp = gp2)
 #'
-#'    grid.newpage()
-#'    grid.pattern_polygon_tiling(x_hex, y_hex, type = "rhombille",
-#'                                spacing = 0.2, gp = gp3)
-#'  }
+#' grid::grid.newpage()
+#' grid.pattern_polygon_tiling(x_hex, y_hex, type = "snub_trihexagonal",
+#'                             spacing = 0.2, gp = gp3)
 #'
+#' grid::grid.newpage()
+#' grid.pattern_polygon_tiling(x_hex, y_hex, type = "rhombille",
+#'                               spacing = 0.2, gp = gp3)
 #' @export
 grid.pattern_polygon_tiling <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...,
                                         colour = gp$col %||% "grey20",
                                         fill = gp$fill %||% "grey80",
-                                        angle = 30, spacing = 0.05, xoffset = 0, yoffset = 0,
+                                        angle = 30, spacing = 0.05, xoffset = 0, yoffset = 0, units = "snpc",
                                         type = "square",
                                         alpha = gp$alpha %||% NA_real_,
                                         linetype = gp$lty %||% 1,
@@ -98,7 +96,7 @@ grid.pattern_polygon_tiling <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("polygon_tiling", x, y, id,
                  colour = colour, fill = fill, angle = angle,
-                 spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  type = type,
                  alpha = alpha, linetype = linetype, linewidth = linewidth,
                  default.units = default.units, name = name, gp = gp , draw = draw, vp = vp)
@@ -148,8 +146,8 @@ create_pattern_polygon_tiling <- function(params, boundary_df, aspect_ratio, leg
 
     xyi <- boundary_df
 
-    fill <- alpha(params$pattern_fill, params$pattern_alpha)
-    col <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill, params$pattern_alpha)
+    col <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd <- params$pattern_linewidth
     lty <- params$pattern_linetype
     stopifnot(length(fill) < 4L, max(lengths(list(col, lwd, lty))) == 1L)

@@ -40,13 +40,13 @@ grid.pattern_ambient(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
 \item{type}{Either cubic, perlin, simplex, value, white, or worley}
 
-\item{fill}{Fill colour}
+\item{fill}{Colour.}
 
-\item{fill2}{Second colour}
+\item{fill2}{Second colour.}
 
 \item{frequency}{Determines the granularity of the features in the noise.}
 
@@ -118,10 +118,12 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_ambient()} draws noise patterns onto the graphic device powered by the \code{ambient} package.
 }
 \examples{
- if (requireNamespace("ambient")) {
+ if (requireNamespace("ambient", quietly = TRUE)) {
    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
    grid.pattern_ambient(x_hex, y_hex, fill = "green", fill2 = "blue")
+ }
+ if (requireNamespace("ambient")) {
    grid::grid.newpage()
    grid.pattern_ambient(x_hex, y_hex, fill = "green", fill2 = "blue", type = "cubic")
  }

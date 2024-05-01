@@ -1,13 +1,3 @@
-# replacement for scales::alpha that only depends on grDevices
-alpha <- function(colour, alpha = NA_real_) {
-    n <- max(lengths(list(colour, alpha)))
-    colour <- rep(colour, length.out = n)
-    alpha <- rep(alpha, length.out = n)
-    m <- grDevices::col2rgb(colour, alpha=TRUE) / 255.0
-    m[4, ] <- ifelse(is.na(alpha), m[4, ], alpha)
-    apply(m, 2, function(x) grDevices::rgb(x[1], x[2], x[3], x[4]))
-}
-
 # Added to ggplot2 by Thomas Lin Pedersen
 # Fast data.frame constructor and indexing
 # No checking, recycling etc. unless asked for

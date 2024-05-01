@@ -9,20 +9,22 @@
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @seealso See \url{https://en.wikipedia.org/wiki/Rose_(mathematics)} for more information.
 #' @examples
-#'   if (require("grid") && capabilities("png")) {
+#'   if (capabilities("png") || guess_has_R4.1_features("masks")) {
 #'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
 #'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     gp <- gpar(fill = c("blue", "red", "yellow", "green"), col = "black")
-#'
-#'     grid.newpage()
+#'     gp <- grid::gpar(fill = c("blue", "red", "yellow", "green"), col = "black")
 #'     grid.pattern_rose(x_hex, y_hex,
 #'                       spacing = 0.15, density = 0.5, angle = 0,
 #'                       frequency = 1:4, gp = gp)
-#'     grid.newpage()
+#'   }
+#'   if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'     grid::grid.newpage()
 #'     grid.pattern_rose(x_hex, y_hex,
 #'                       spacing = 0.15, density = 0.5, angle = 0,
 #'                       frequency = 1/1:4, gp = gp)
-#'     grid.newpage()
+#'   }
+#'   if (capabilities("png") || guess_has_R4.1_features("masks")) {
+#'     grid::grid.newpage()
 #'     grid.pattern_rose(x_hex, y_hex,
 #'                       spacing = 0.18, density = 0.5, angle = 0,
 #'                       frequency = c(3/2, 7/3, 5/4, 3/7), gp = gp)
@@ -32,7 +34,7 @@ grid.pattern_rose <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...
                               colour = gp$col %||% "grey20",
                               fill = gp$fill %||% "grey80",
                               angle = 30, density = 0.2,
-                              spacing = 0.05, xoffset = 0, yoffset = 0,
+                              spacing = 0.05, xoffset = 0, yoffset = 0, units = "snpc",
                               frequency = 0.1,
                               grid = "square", type = NULL, subtype = NULL,
                               rot = 0,
@@ -48,7 +50,7 @@ grid.pattern_rose <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1L, ...
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("rose", x, y, id,
                  colour = colour, fill = fill, angle = angle,
-                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  scale = scale, frequency = frequency,
                  grid = grid, type = type, subtype = subtype, rot = rot,
                  use_R4.1_masks = use_R4.1_masks, png_device = png_device, res = res,
@@ -70,8 +72,8 @@ create_pattern_rose <- function(params, boundary_df, aspect_ratio, legend = FALS
     grid_xy <- get_xy_grid(params, vpm)
 
     # construct grobs using subsets if certain inputs are vectorized
-    fill <- alpha(params$pattern_fill, params$pattern_alpha)
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill, params$pattern_alpha)
+    col  <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd  <- params$pattern_linewidth * .pt
     lty  <- params$pattern_linetype
 
@@ -81,13 +83,13 @@ create_pattern_rose <- function(params, boundary_df, aspect_ratio, legend = FALS
 
     n_par <- max(lengths(list(fill, col, lwd, lty, density, rot, frequency)))
 
-    fill <- rep(fill, length.out = n_par)
-    col <- rep(col, length.out = n_par)
-    lwd <- rep(lwd, length.out = n_par)
-    lty <- rep(lty, length.out = n_par)
-    density <- rep(density, length.out = n_par)
-    rot <- rep(rot, length.out = n_par)
-    frequency <- rep(frequency, length.out = n_par)
+    fill <- rep_len_fill(fill, n_par)
+    col <- rep_len(col, n_par)
+    lwd <- rep_len(lwd, n_par)
+    lty <- rep_len(lty, n_par)
+    density <- rep_len(density, n_par)
+    rot <- rep_len(rot, n_par)
+    frequency <- rep_len(frequency, n_par)
 
     density_max <- max(density)
 
@@ -110,7 +112,7 @@ create_pattern_rose <- function(params, boundary_df, aspect_ratio, legend = FALS
         # rotate by 'angle'
         xy_par <- rotate_xy(xy_par$x, xy_par$y, params$pattern_angle, vpm$x, vpm$y)
 
-        gp <- gpar(fill = fill[i_par], col = col[i_par], lwd = lwd[i_par], lty = lty[i_par])
+        gp <- gpar(fill = fill[[i_par]], col = col[i_par], lwd = lwd[i_par], lty = lty[i_par])
 
         name <- paste0("rose.", i_par)
         grob <- points_to_rose_grob(xy_par, xy_rose, gp, default.units, name)

@@ -6,15 +6,13 @@
 #' @param fill2 The fill colour for the \dQuote{top} crosshatch lines.
 #' @return A grid grob object invisibly.  If `draw` is `TRUE` then also draws to the graphic device as a side effect.
 #' @examples
-#'   if (require("grid")) {
-#'     x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-#'     grid.pattern_crosshatch(x_hex, y_hex, colour = "black", fill = "blue",
-#'                             fill2 = "yellow", density = 0.5)
-#'     grid.newpage()
-#'     grid.pattern_crosshatch(x_hex, y_hex, density = 0.3,
-#'                             gp = gpar(col = "blue", fill = "yellow"))
-#'   }
+#' x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+#' grid.pattern_crosshatch(x_hex, y_hex, colour = "black", fill = "blue",
+#'                         fill2 = "yellow", density = 0.5)
+#' grid::grid.newpage()
+#' grid.pattern_crosshatch(x_hex, y_hex, density = 0.3,
+#'                         gp = grid::gpar(col = "blue", fill = "yellow"))
 #' @seealso [grid.pattern_weave()] which interweaves two sets of lines.
 #'        For a single set of lines use [grid.pattern_stripe()].
 #' @export
@@ -22,7 +20,7 @@ grid.pattern_crosshatch <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1
                                     colour = gp$col %||% "grey20",
                                     fill = gp$fill %||% "grey80", fill2 = fill,
                                     angle = 30, density = 0.2,
-                                    spacing = 0.05, xoffset = 0, yoffset = 0,
+                                    spacing = 0.05, xoffset = 0, yoffset = 0, units = "snpc",
                                     alpha = gp$alpha %||% NA_real_,
                                     linetype = gp$lty %||% 1,
                                     linewidth = size %||% gp$lwd %||% 1,
@@ -32,7 +30,7 @@ grid.pattern_crosshatch <- function(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), id = 1
     if (missing(colour) && hasName(l <- list(...), "color")) colour <- l$color
     grid.pattern("crosshatch", x, y, id,
                  colour = colour, fill = fill, fill2 = fill2, angle = angle,
-                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset,
+                 density = density, spacing = spacing, xoffset = xoffset, yoffset = yoffset, units = units,
                  alpha = alpha, linetype = linetype, linewidth = linewidth,
                  grid = grid,
                  default.units = default.units, name = name, gp = gp , draw = draw, vp = vp)
@@ -57,8 +55,8 @@ create_crosshatch_via_sf_helper <- function(params, boundary_df, add_top_hatch =
     # create grid of points large enough to cover viewport no matter the angle
     grid_xy <- get_xy_grid(params, vpm)
 
-    fill <- alpha(params$pattern_fill, params$pattern_alpha)
-    col  <- alpha(params$pattern_colour, params$pattern_alpha)
+    fill <- update_alpha(params$pattern_fill, params$pattern_alpha)
+    col  <- update_alpha(params$pattern_colour, params$pattern_alpha)
     lwd  <- params$pattern_linewidth * .pt
     lty  <- params$pattern_linetype
     gp <- gpar(col = col, fill = fill, lwd = lwd, lty = lty, lineend = 'square')
@@ -71,7 +69,7 @@ create_crosshatch_via_sf_helper <- function(params, boundary_df, add_top_hatch =
                                             gp, default.units, "stripe")
 
     if (add_top_hatch) {
-        gp$fill <- alpha(params$pattern_fill2, params$pattern_alpha)
+        gp$fill <- update_alpha(params$pattern_fill2, params$pattern_alpha)
 
         stripes_sf_top <- create_v_stripes_sf(params, grid_xy, vpm)
         clipped_stripes_sf_top <- sf::st_intersection(stripes_sf_top, boundary_sf)

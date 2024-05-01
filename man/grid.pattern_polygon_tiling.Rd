@@ -20,6 +20,7 @@ grid.pattern_polygon_tiling(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   type = "square",
   alpha = gp$alpha \%||\% NA_real_,
   linetype = gp$lty \%||\% 1,
@@ -42,30 +43,32 @@ names_polygon_tiling
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{type}{Name of polygon tiling to draw.  See Details.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).
 Not supported for all polygon tiling \code{type}.}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{default.units}{A string indicating the default units to use if \code{x} or \code{y}
 are only given as numeric vectors.}
@@ -134,33 +137,31 @@ dodecagons, hexagons, and squares.}
 }
 }
 \examples{
- print(names_polygon_tiling)
- if (require("grid")) {
-   x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-   y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-   gp1 <- gpar(fill = "yellow", col = "black")
-   gp2 <- gpar(fill = c("yellow", "red"), col = "black")
-   gp3 <- gpar(fill = c("yellow", "red", "blue"), col = "black")
+print(names_polygon_tiling)
 
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "herringbone", gp = gp1)
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+gp1 <- grid::gpar(fill = "yellow", col = "black")
+gp2 <- grid::gpar(fill = c("yellow", "red"), col = "black")
+gp3 <- grid::gpar(fill = c("yellow", "red", "blue"), col = "black")
 
-   grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal",
-                               spacing = 0.2, gp = gp3)
+grid.pattern_polygon_tiling(x_hex, y_hex, type = "herringbone", gp = gp1)
 
-   grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean",
-                               spacing = 0.2, gp = gp2)
+grid::grid.newpage()
+grid.pattern_polygon_tiling(x_hex, y_hex, type = "hexagonal",
+                            spacing = 0.2, gp = gp3)
 
-   grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "snub_trihexagonal",
-                               spacing = 0.2, gp = gp3)
+grid::grid.newpage()
+grid.pattern_polygon_tiling(x_hex, y_hex, type = "pythagorean",
+                            spacing = 0.2, gp = gp2)
 
-   grid.newpage()
-   grid.pattern_polygon_tiling(x_hex, y_hex, type = "rhombille",
-                               spacing = 0.2, gp = gp3)
- }
+grid::grid.newpage()
+grid.pattern_polygon_tiling(x_hex, y_hex, type = "snub_trihexagonal",
+                            spacing = 0.2, gp = gp3)
 
+grid::grid.newpage()
+grid.pattern_polygon_tiling(x_hex, y_hex, type = "rhombille",
+                              spacing = 0.2, gp = gp3)
 }
 \seealso{
 The tiling vignette \code{vignette("tiling", package = "gridpattern")} for more

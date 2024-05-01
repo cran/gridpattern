@@ -16,6 +16,7 @@ grid.pattern_wave(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   amplitude = 0.5 * spacing,
   frequency = 1/spacing,
   alpha = gp$alpha \%||\% NA_real_,
@@ -39,33 +40,35 @@ grid.pattern_wave(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
 
-\item{amplitude}{Wave amplitude (\dQuote{snpc} units)}
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{amplitude}, \code{frequency}, \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
-\item{frequency}{Linear frequency (inverse \dQuote{snpc} units)}
+\item{amplitude}{Wave amplitude (in \code{units} units)}
+
+\item{frequency}{Linear frequency (in inverse \code{units} units)}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{grid}{Adjusts placement and density of certain graphical elements.
 \code{"square"} (default) is a square grid.
@@ -96,22 +99,19 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_wave()} draws a wave pattern onto the graphic device.
 }
 \examples{
-  if (require("grid")) {
-    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    grid.newpage()
-    grid.pattern_wave(x_hex, y_hex, colour = "black", type = "sine",
-                      fill = c("red", "blue"), density = 0.4,
-                      spacing = 0.15, angle = 0,
-                      amplitude = 0.05, frequency = 1 / 0.20)
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+grid::grid.newpage()
+grid.pattern_wave(x_hex, y_hex, colour = "black", type = "sine",
+                  fill = c("red", "blue"), density = 0.4,
+                  spacing = 0.15, angle = 0,
+                  amplitude = 0.05, frequency = 1 / 0.20)
 
-    # zig-zag pattern is a wave of `type` "triangle"
-    grid.newpage()
-    grid.pattern_wave(x_hex, y_hex, colour = "black", type = "triangle",
-                        fill = c("red", "blue"), density = 0.4,
-                        spacing = 0.15, angle = 0, amplitude = 0.075)
-
-  }
+# zig-zag pattern is a wave of `type` "triangle"
+grid::grid.newpage()
+grid.pattern_wave(x_hex, y_hex, colour = "black", type = "triangle",
+                    fill = c("red", "blue"), density = 0.4,
+                    spacing = 0.15, angle = 0, amplitude = 0.075)
 }
 \seealso{
 Use \code{\link[=grid.pattern_stripe]{grid.pattern_stripe()}} for straight lines instead of waves.

@@ -16,6 +16,7 @@ grid.pattern_circle(
   spacing = 0.05,
   xoffset = 0,
   yoffset = 0,
+  units = "snpc",
   alpha = gp$alpha \%||\% NA_real_,
   linetype = gp$lty \%||\% 1,
   linewidth = size \%||\% gp$lwd \%||\% 1,
@@ -38,29 +39,31 @@ grid.pattern_circle(
 \item{id}{A numeric vector used to separate locations in x, y into multiple boundaries.
 All locations within the same \code{id} belong to the same boundary.}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 
-\item{colour}{Stroke colour}
+\item{colour}{Stroke colour(s).}
 
-\item{fill}{Fill colour}
+\item{fill}{Fill colour(s) or \code{\link[grid:patterns]{grid::pattern()}} / gradient object(s).}
 
-\item{angle}{Rotation angle in degrees}
+\item{angle}{Rotation angle in degrees.}
 
 \item{density}{Approx. fraction of area the pattern fills.}
 
-\item{spacing}{Spacing between repetitions of pattern ('snpc' units between 0 and 1).}
+\item{spacing}{Spacing between repetitions of pattern (in \code{units} units).}
 
-\item{xoffset}{Shift pattern along x axis ('snpc' units between 0 and 1).}
+\item{xoffset}{Shift pattern along x axis (in \code{units} units).}
 
-\item{yoffset}{Shift pattern along y axis ('snpc' units between 0 and 1).}
+\item{yoffset}{Shift pattern along y axis (in \code{units} units).}
+
+\item{units}{\code{\link[grid:unit]{grid::unit()}} units for \code{spacing}, \code{xoffset}, and \code{yoffset} parameters.}
 
 \item{alpha}{Alpha (between 0 and 1) or \code{NA} (default, preserves colors' alpha value).}
 
-\item{linetype}{Stroke linetype}
+\item{linetype}{Stroke linetype.}
 
-\item{linewidth}{Stroke linewidth}
+\item{linewidth}{Stroke linewidth.}
 
-\item{size}{For backwards compatibility can be used to set \code{linewidth}}
+\item{size}{For backwards compatibility can be used to set \code{linewidth}.}
 
 \item{grid}{Adjusts placement and density of certain graphical elements.
 \code{"square"} (default) is a square grid.
@@ -97,21 +100,18 @@ A grid grob object invisibly.  If \code{draw} is \code{TRUE} then also draws to 
 \code{grid.pattern_circle()} draws a circle pattern onto the graphic device.
 }
 \examples{
-  if (require("grid")) {
-    x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
-    grid.pattern_circle(x_hex, y_hex, fill = c("blue", "yellow"), density = 0.5)
-    grid.newpage()
-    grid.pattern_circle(x_hex, y_hex, density = 0.8, grid = "hex_circle",
-                        gp = gpar(fill = c("blue", "yellow", "red")))
-    grid.newpage()
-    grid.pattern_circle(x_hex, y_hex, density = 1.2, grid = "hex_circle",
-                        gp = gpar(fill = c("blue", "yellow", "red")))
-
-    # using a "twill_zigzag" 'weave' pattern
-    grid.newpage()
-    grid.pattern_circle(x_hex, y_hex, fill = "blue", density = 0.5, type = "twill_zigzag")
-  }
+x_hex <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+y_hex <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+grid.pattern_circle(x_hex, y_hex, fill = c("blue", "yellow"), density = 0.5)
+grid::grid.newpage()
+grid.pattern_circle(x_hex, y_hex, density = 0.8, grid = "hex_circle",
+                    gp = grid::gpar(fill = c("blue", "yellow", "red")))
+grid::grid.newpage()
+grid.pattern_circle(x_hex, y_hex, density = 1.2, grid = "hex_circle",
+                    gp = grid::gpar(fill = c("blue", "yellow", "red")))
+# using a "twill_zigzag" 'weave' pattern
+grid::grid.newpage()
+grid.pattern_circle(x_hex, y_hex, fill = "blue", density = 0.5, type = "twill_zigzag")
 }
 \seealso{
 See \code{\link[=grid.pattern_regular_polygon]{grid.pattern_regular_polygon()}} for a more general case of this pattern.

@@ -1,3 +1,60 @@
+gridpattern v1.2.1
+==================
+
+Breaking Changes
+----------------
+
+* The default `type` for the "placeholder" pattern
+  is now "bear" instead of "kitten".
+  Explicitly set `type = "kitten"` to continue to use
+  the "kitten" placeholder but note that although
+  the "kitten" placeholder website isn't completely down
+  it has been buggy recently (#73).
+
+New Features
+------------
+
+* `patternFill()` wraps `patternGrob()` to return a
+  `grid::pattern()` fill object (#70).
+* The "geometry" patterns (e.g. "circle", "stripe", etc.) now allow
+  the `fill` to be pattern fills (#67).
+* The "geometry" patterns (e.g. "circle", "stripe", etc.) now allow
+  the new `units` parameter to set which `grid::unit()` to use for the
+  the `spacing`, `xoffset`, and `yoffset` parameters
+  (and for the "wave" pattern also the `amplitude` and `frequency` parameters) (#58).
+  By default it will continue to be "snpc" units but can now be changed to "cm", "in", etc.
+* `update_alpha()` updates fill colour and/or pattern transparency.
+
+  + It is a fork of `ggplot2::fill_alpha()` by @teunbrand.
+  + It does not depend on `{ggplot2}` or `{scales}`.
+  + It does not throw an error with a length one list of a vector of multiple colours.
+  + It is available as a "standalone" file. 
+    You may copy its source under the permissive MIT license into your own R package by either 
+    using `usethis::use_standalone("trevorld/gridpattern", "standalone-update_alpha.R")`
+    or simply copying `standalone-update_alpha.R` into your R directory and adding
+    `grDevices`, `grid`, and `rlang` to the `Imports` of your `DESCRIPTION` file.
+
+* For completeness there is now a new "fill" pattern with corresponding
+  `grid.pattern_fill()` which draws a simple fill pattern.
+* For completeness there is now a `grid.pattern_none()` corresponding to the previously
+  supported "none" pattern which draws nothing.
+
+Bug fixes and minor improvements
+--------------------------------
+
+* The `wave` pattern no longer quietly and incorrectly ignores the `frequency` parameter.
+  The effective wavelength of the wave pattern is now `1 / frequency` instead of `spacing`.
+  However `frequency` will continue to default to `1 / spacing`.
+* `clippingPathGrob()` can now more efficiently compute a `rasterGrob()` approximation
+  via `ragg::agg_capture()` and for `png_device` functions that support
+  the clipping path feature such as`png(type = "cairo")`(#74).
+* `alphaMaskGrob()` can now more efficiently compute a `rasterGrob()` approximation
+  for `png_device` functions that support
+  the alpha mask feature such as`png(type = "cairo")`(#75).
+* `alphaMaskGrob()` and `clippingPathGrob()` now 
+  switch back to the previously open graphics device if 
+  they open and close any new graphics devices.
+
 gridpattern v1.1.1
 ==================
 
@@ -280,7 +337,7 @@ gridpattern v0.1.2
   * "regular_polygon" ``grid.pattern_regular_polygon()`` (#20)
   * "weave" ``grid.pattern_weave()`` (#12)
 
-* Supports the following patterns from [ggpattern](https://github.com/coolbutuseless/ggpattern):
+* Supports the following patterns from [ggpattern](https://github.com/trevorld/ggpattern):
 
   * "ambient" ``grid.pattern_ambient()``  
   * "circle" ``grid.pattern_circle()`` (#5)
@@ -292,8 +349,8 @@ gridpattern v0.1.2
   * "placeholder" ``grid.pattern_placeholder()`` (#10)
   * "plasma" ``grid.pattern_plasma()`` (#7)
   * "stripe" ``grid.pattern_stripe()`` (#3)
-  * [Custom ggpattern geometry-based patterns](https://coolbutuseless.github.io/package/ggpattern/articles/developing-patterns-2.html) (#1)
-  * [Custom ggpattern array-based patterns](https://coolbutuseless.github.io/package/ggpattern/articles/developing-patterns-3.html) (#2)
+  * [Custom ggpattern geometry-based patterns](https://trevorldavis.com/R/gridpattern/dev/articles/developing-patterns.html) (#1)
+  * [Custom ggpattern array-based patterns](https://trevorldavis.com/R/gridpattern/dev/articles/developing-patterns.html) (#2)
 
   Enhancements made to the ``{ggpattern}`` patterns provided by this package:
 
