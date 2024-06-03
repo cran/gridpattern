@@ -1,7 +1,7 @@
-f5b3205b7d6ecf2c186c1fcb8d12faf5 *DESCRIPTION
+e19118f21ebbbaca9c09757cb4f9cbdb *DESCRIPTION
 b2d56adb68a6f0c42155cf5d45c39ad1 *LICENSE
 82866aebf6709f82505becdfc866d76a *NAMESPACE
-88402b081b44245ace926c1fd79e203c *NEWS.md
+21f695ee4faba254409df87530a7d932 *NEWS.md
 5254b92f2161f53a27aa7f21552312f4 *R/alphaMaskGrob.R
 6fe964b80929e45baf5a802b4e61063c *R/clippingPathGrob.R
 fb1974fdd3c1758b5c4686dce5b5d3a6 *R/grid-pattern-fill.R
@@ -11,7 +11,7 @@ fb1974fdd3c1758b5c4686dce5b5d3a6 *R/grid-pattern-fill.R
 4f55f5e68491624bea1d1bffdf58af29 *R/pattern-array-ambient.R
 a0d995f4daffd4989c71b1d58915971d *R/pattern-array-image.R
 6193d902b923e81adcb12230b4e4f65c *R/pattern-array-magick.R
-3ffc7484329ddf12af7571ebc64e2f11 *R/pattern-array-placeholder.R
+5fe42f04be89064404606ed0c65e7482 *R/pattern-array-placeholder.R
 4b538e022d94c18ef16fdc888de4bb54 *R/pattern-array-plasma.R
 cf3f9f4a94f41b2b6e212066b14b8c71 *R/pattern-both-gradient.R
 8003fcc4e49a31ebf8e4b91b03de37e9 *R/pattern-both-rose.R
@@ -23,9 +23,9 @@ e2e634e57a4773ddd7f3cbb8f212cbf3 *R/pattern-geometry-fill.R
 a3730124e7fe681a5914ae40847a9016 *R/pattern-geometry-pch.R
 36b7fc85ce93fe846be32b1946a6fe3c *R/pattern-geometry-regular_polygon.R
 73b7d4cc6a16fb3862fe87c69ac97ea4 *R/pattern-geometry-stripe.R
-370e06ba2efea05f763244d16d216c5b *R/pattern-geometry-tiling.R
+91e41adbb9c3580c057692e4771269d7 *R/pattern-geometry-tiling.R
 d3272c5ba355c2a835950dcdb71c9bf3 *R/pattern-geometry-wave.R
-3e2b22eee91bccf50ed54de7c8749823 *R/pattern-geometry-weave.R
+915f37987b18e51078f46ce9a7f80996 *R/pattern-geometry-weave.R
 ee60d929f512faf087b428b0d14cb1a0 *R/pattern_hex.R
 160ee48fea89876ad746d9e545dce189 *R/pattern_square.R
 2691e1d58c20257b87a0c62a1e9f4f0d *R/pattern_weave.R
@@ -85,7 +85,7 @@ b56192dfe39dca85ef7a8f27dc96cbcc *man/grid.pattern_image.Rd
 cd79d7088605b0c31d88e58895cf407d *man/grid.pattern_magick.Rd
 ccb8ca436609705d9aa1294ed55cf0fb *man/grid.pattern_none.Rd
 07946208f339ec9d439b4235d8c1510d *man/grid.pattern_pch.Rd
-970e5b7f6ab9fc0ad4689f97d0306912 *man/grid.pattern_placeholder.Rd
+15eee1900d89055bed1804772dcd7f7a *man/grid.pattern_placeholder.Rd
 0ab8fcae08248a4028223c6d88d75dac *man/grid.pattern_plasma.Rd
 7b83a58502870b959710dc5b195e0e90 *man/grid.pattern_polygon_tiling.Rd
 950a2db5263aab5abc9b03a24a129c0d *man/grid.pattern_regular_polygon.Rd
@@ -93,7 +93,7 @@ ccb8ca436609705d9aa1294ed55cf0fb *man/grid.pattern_none.Rd
 75c95726afd5e48f3506de1904b43778 *man/grid.pattern_stripe.Rd
 e64691196834aae5f12046c3a8bf960e *man/grid.pattern_text.Rd
 baadb4465e80fe25eb12555db0835eb8 *man/grid.pattern_wave.Rd
-6bce199b3c42e7084c6199cd15d28b74 *man/grid.pattern_weave.Rd
+8f929df5f556e4cba5d8e375885303be *man/grid.pattern_weave.Rd
 137b75e64778cc878ac71ab66dfc725e *man/gridpattern-package.Rd
 5e13b4ebd025bf541ed9d0c18d7f5bd0 *man/guess_has_R4.1_features.Rd
 59b802f8cd68dac025429b3bc3bd64e0 *man/mean_col.Rd
@@ -151,7 +151,7 @@ fda8193a53d1d23890ed8e567099a2e3 *tests/testthat/_snaps/geometry/wave-triangle.s
 02d9780c3772284b871c908680649bb6 *tests/testthat/_snaps/pch/simple.svg
 433038d2c90cc5677c4acfc9517bec9b *tests/testthat/_snaps/tiling/12-12-4.svg
 56669a98319fdd7ac1cf80b295fe5919 *tests/testthat/_snaps/tiling/12-3-12-3.svg
-5b5de8a451961a393d7a99695267a3d5 *tests/testthat/_snaps/tiling/18-18-3.svg
+a72c1ad5e21284cd2fdb461d42b96409 *tests/testthat/_snaps/tiling/18-18-3.svg
 6e2edc0794e65961d29a736acdaa58f7 *tests/testthat/_snaps/tiling/2-2-2-2.svg
 35f9716ecb4d477fe10670f6c769157a *tests/testthat/_snaps/tiling/2-3-12.svg
 6423cd546596d2cd41fd26a82ce47972 *tests/testthat/_snaps/tiling/3-3-3-12-3-3-12.svg
