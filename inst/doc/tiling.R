@@ -24,7 +24,7 @@ red <- grDevices::rgb(0.80, 0.40, 0.00)
 green <- grDevices::rgb(0.00, 0.60, 0.50)
 orange <- grDevices::rgb(0.90, 0.60, 0.00)
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different uniform colorings of a triangular tiling"------
 grid.triangular_tiling <- function(...) {
     grid.pattern_regular_polygon(..., shape = "convex3", density = 1, grid = "hex",
                                  spacing = 0.2, angle = 0, rot = 180)
@@ -58,7 +58,7 @@ grid.triangular_tiling(gp = gp)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different uniform colorings of a square tiling"----------
 # 2 color uniform square tiling (1212)
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 gp <- gpar(fill = c(yellow, red), col = "black")
@@ -85,7 +85,7 @@ grid.pattern_regular_polygon(shape = "square", density = 1,
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different uniform colorings of a hexagonal tiling"-------
 grid.hexagonal_tiling <- function(..., shape = "convex6", spacing = 0.2) {
     scale <- star_scale(6, 30)
     grid.pattern_regular_polygon(..., shape = shape, density = 1, grid = "hex",
@@ -117,7 +117,7 @@ grid.hexagonal_tiling(shape = "star6", spacing = 0.3, gp = gp)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three different uniform colorings of an elongated triangular tiling"----
 grid.elongated_triangular_tiling <- function(...) {
     grid.polygon(x_sq, y_sq, gp = gpar(fill = yellow, col = NA))
     grid.pattern_regular_polygon(..., shape = rep(c("convex4", "convex3"), each = 2), 
@@ -146,7 +146,7 @@ grid.elongated_triangular_tiling(gp = gp)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three different uniform colorings of a snub square tiling"----
 grid.snub_square <- function(..., gp_sq, gp_sq2 = gp_sq, gp_tri = gp_sq) {
     scale_star <- star_scale(4, 90 + 60, external = TRUE)
     grid.polygon(x_sq, y_sq, gp = gp_sq)
@@ -180,7 +180,7 @@ pushViewport(viewport(x=0.75, y=0.25, width=0.5, height=0.5))
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different uniform colorings of a truncated square tiling"----
 # 2 color uniform truncated square tiling
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 gp <- gpar(fill = red, col = NA)
@@ -226,7 +226,7 @@ grid.pattern_regular_polygon(shape = c("null", "star8"),
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "A truncated hexagonal tiling and a related 'star12' variation"----
 # 2 color uniform truncated hexagonal tiling
 grid.truncated_hexagonal_tiling <- function(..., shape = "convex12") {
     scale <- star_scale(12, 60, external = TRUE)
@@ -252,7 +252,7 @@ grid.truncated_hexagonal_tiling(gp = gp, shape = "star12")
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "A trihexagonal tiling plus 'star6', 'star3', and 'convex3' variations"----
 grid.trihexagonal_tiling <- function(..., shape = "convex6", density = 1) {
     grid.pattern_regular_polygon(..., shape = shape, density = density, grid = "hex_circle",
                                  spacing = 0.2, rot = 30, angle = 0)
@@ -285,7 +285,7 @@ grid.trihexagonal_tiling(shape = "convex3", density=1.33, gp = gp)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three different colorings of a snub trihexagonal tiling"------
 grid.snub_trihexagonal <- function(..., gp_tri, gp_tri2 = gp_tri, gp_hex = gp_tri) {
     scale_star <- star_scale(6, 60 + 60, external = TRUE)
     grid.polygon(x_sq, y_sq, gp = gp_tri)
@@ -320,7 +320,7 @@ pushViewport(viewport(x=0.75, y=0.25, width=0.5, height=0.5))
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Two different colorings of a truncated trihexagonal tiling"----
 # truncated trihexagonal
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 grid.polygon(x_sq, y_sq, gp = gpar(fill = yellow, col = NA))
@@ -356,7 +356,7 @@ pushViewport(viewport(x=0.75, y=0.25, width=0.5, height=0.5))
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Two different colorings of a rhombitrihexagonal tiling plus a 'star12' variation"----
 # rhombitrihexagonal
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 grid.polygon(x_sq, y_sq, gp = gpar(fill = yellow, col = NA))
@@ -413,7 +413,7 @@ pushViewport(viewport(x=0.75, y=0.25, width=0.5, height=0.5))
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four uniform tilings with star polygons"----------------------
 # 12.12.4*
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 grid.polygon(x_sq, y_sq, gp = gpar(fill = red, col = NA))
@@ -458,7 +458,7 @@ grid.pattern_regular_polygon(shape = "star8", density = 1.082, rot = 22.5,
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four more uniform tilings with star polygons"-----------------
 # 3.6*.6**
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 grid.polygon(x_sq, y_sq, gp = gpar(fill = red, col = NA))
@@ -498,7 +498,7 @@ grid.pattern_regular_polygon(shape = c("convex8", "null"), density = 1.41,
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Two more uniform tilings with star polygons"------------------
 # 18.18.3*
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 grid.polygon(x_sq, y_sq, gp = gpar(fill = blue, col = NA))
@@ -520,7 +520,7 @@ grid.pattern_regular_polygon(shape = c("star8", "convex4"), scale = scale,
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different herringbone tilings"---------------------------
 grid.herringbone_tiling <- function(..., subtype = "2/2(1)") {
     grid.pattern_weave(..., type = "twill", subtype = subtype, density = 1, 
                        spacing = 0.1, angle = 45)
@@ -550,7 +550,7 @@ grid.herringbone_tiling(gp = gp, fill2 = red, subtype = "3/3(1)")
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different colorings of a Pythagorean tiling"-------------
 grid.pythagorean_tiling <- function(...) {
     grid.pattern_regular_polygon(..., shape = "convex4", density = 1.222, 
                                  rot = 15, spacing = 0.2, angle = -15)
@@ -584,7 +584,7 @@ grid.pythagorean_tiling(gp = gp)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three different colorings of a rhombille tiling"--------------
 grid.rhombille_tiling <- function(gp1, gp2 = gp1, gp3 = gp2) {
     grid.pattern_regular_polygon(shape = "rhombille_rhombus", density = 1,
                        angle = 0, rot = -120, spacing = 0.2,
@@ -613,7 +613,7 @@ grid.rhombille_tiling(gp1, gp2, gp3)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Four different colorings of a tetrakis square tiling"---------
 grid.tetrakis_tiling <- function(gp1, gp2 = gp1, gp3 = gp2, gp4 = gp1) {
     grid.pattern_regular_polygon(shape = "tetrakis_left", density = 1, 
                                  angle = 0, rot=0, gp = gp1, spacing = 0.25)
@@ -655,7 +655,7 @@ grid.tetrakis_tiling(gp1, gp2, gp3, gp4)
 popViewport()
 add_borders()
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three different tilings using rhombi"-------------------------
 # 2*.2**.2*.2**
 pushViewport(viewport(x=0.25, y=0.75, width=0.5, height=0.5))
 sp <- 0.3

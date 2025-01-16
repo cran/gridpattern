@@ -22,8 +22,8 @@ x,  y,  id
 knitr::kable(x, caption = "example data in 'polygon_df' format")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  options(ggpattern_array_funcs    = list(your_pattern_name = your_pattern_function))
-#  options(ggpattern_geometry_funcs = list(your_pattern_name = your_pattern_function))
+# options(ggpattern_array_funcs    = list(your_pattern_name = your_pattern_function))
+# options(ggpattern_geometry_funcs = list(your_pattern_name = your_pattern_function))
 
 ## -----------------------------------------------------------------------------
 create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = FALSE) {
@@ -44,7 +44,7 @@ create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = F
 ## -----------------------------------------------------------------------------
 options(ggpattern_geometry_funcs = list(polygon = create_pattern_polygon))
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three rectangles each filled with a single color"-------------
 grid.pattern("polygon", fill = "red", size = 4, linetype = "dashed", 
              x = c(0.05, 0.05, 0.305, 0.305), y = c(0.05, 0.305, 0.305, 0.05))
 grid.pattern("polygon", fill = "green", alpha = 0.2, 
@@ -87,7 +87,7 @@ create_pattern_complex <- function(params, boundary_df, aspect_ratio, legend = F
 ## -----------------------------------------------------------------------------
 options(ggpattern_geometry_funcs = list(complex = create_pattern_complex))
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three rectangles each with a 'stripe', 'circle', and 'gradient' pattern"----
 grid.pattern("complex", fill = "red", angle = 45, spacing = 0.05, density = 0.3,
              x = c(0.0, 0.0, 0.3, 0.3), y = c(0.0, 0.3, 0.3, 0.0))
 grid.pattern("complex", fill = "green", angle = 45, spacing = 0.2, density = 0.2,
@@ -125,7 +125,7 @@ create_pattern_simple <- function(width, height, params, legend) {
 ## -----------------------------------------------------------------------------
 options(ggpattern_array_funcs = list(simple = create_pattern_simple))
 
-## -----------------------------------------------------------------------------
+## ----fig.alt = "Three rectangles each filled with an 'array' pattern"---------
 grid::grid.polygon(x = c(0, 0, 1, 1), y = c(0, 1, 1, 0), 
                    gp = grid::gpar(col=NA, fill="grey"))
 grid.pattern("simple", type = "a",
