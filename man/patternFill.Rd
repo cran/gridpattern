@@ -20,7 +20,7 @@ patternFill(
 \arguments{
 \item{...}{Passed to \code{\link[=patternGrob]{patternGrob()}}.}
 
-\item{x, y, width, height}{The size of the \code{\link[grid:patterns]{grid::pattern()}} tile.}
+\item{x, y, width, height}{The size of the \code{\link[grid:pattern]{grid::pattern()}} tile.}
 
 \item{default.units}{The default \code{\link[grid:unit]{grid::unit()}} unit to use for \code{x}, \code{y}, \code{width}, and \code{height}.}
 
@@ -29,10 +29,10 @@ patternFill(
 \item{group}{A logical indicating whether the pattern is relative to the bounding box of the grob or whether it is relative to individual shapes within the grob.  Ignored if R is less than version 4.2.}
 }
 \value{
-A \code{\link[grid:patterns]{grid::pattern()}} fill object.
+A \code{\link[grid:pattern]{grid::pattern()}} fill object.
 }
 \description{
-\code{patternFill()} returns \code{\link[grid:patterns]{grid::pattern()}} fill objects.
+\code{patternFill()} returns \code{\link[grid:pattern]{grid::pattern()}} fill objects.
 It is a wrapper around \code{\link[=patternGrob]{patternGrob()}}.
 }
 \examples{
@@ -42,14 +42,14 @@ if (guess_has_R4.1_features("patterns") &&
   stripe_fill <- patternFill("stripe", fill = c("red", "blue"))
   grid.circle(gp = gpar(fill = stripe_fill))
 }
- 
-if (guess_has_R4.1_features("patterns") && 
+
+if (guess_has_R4.1_features("patterns") &&
     require("ggplot2", quietly = TRUE) &&
     (getRversion() >= "4.2")) {
   grid.newpage()
-  weave_fill <- patternFill("weave", fill = "red", fill2 = "blue", 
+  weave_fill <- patternFill("weave", fill = "red", fill2 = "blue",
                             colour = "transparent")
-  hex_fill <- patternFill("polygon_tiling", type = "hexagonal", 
+  hex_fill <- patternFill("polygon_tiling", type = "hexagonal",
                           fill = c("black", "white", "grey"),
                           colour = "transparent")
   df <- data.frame(trt = c("a", "b"), outcome = c(1.9, 3.2))
