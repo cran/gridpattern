@@ -72,7 +72,7 @@ grid.pattern_hatch <- function(
 		colour <- l$color
 	}
 	grid.pattern(
-		"hatch",
+		"gridpattern::hatch",
 		x,
 		y,
 		id,
@@ -370,7 +370,11 @@ HATCH_NAME_MAP <- c(
 
 create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FALSE) {
 	type_norm <- gsub("[- ]", "", tolower(params$pattern_type))
-	subtype_norm <- gsub("[- ]", "", tolower(params$pattern_subtype %||% "combinatorial"))
+	subtype <- params$pattern_subtype
+	if (is.null(subtype) || is.na(subtype)) {
+		subtype <- "combinatorial"
+	}
+	subtype_norm <- gsub("[- ]", "", tolower(subtype))
 	is_unicode <- subtype_norm == "unicode"
 	is_fox_davies <- subtype_norm == "foxdavies"
 	is_goodman <- subtype_norm == "goodman"
@@ -395,7 +399,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 			params$pattern_type,
 			"' is not supported ",
 			"by the '",
-			params$pattern_subtype %||% "combinatorial",
+			subtype,
 			"' subtype."
 		)
 	}
@@ -423,7 +427,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 			)
 			density <- params$pattern_linewidth * .pt / spacing_bigpts
 			return(patternGrob(
-				"circle",
+				"gridpattern::circle",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,
@@ -445,7 +449,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 			density_dot <- lwd_bigpts / spacing_bigpts * 0.6
 			density_plus <- min(lwd_bigpts / spacing_bigpts * 2, 0.9)
 			return(patternGrob(
-				"pch",
+				"gridpattern::pch",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,
@@ -470,7 +474,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 			lwd_bigpts <- params$pattern_linewidth * .pt
 			density <- min(lwd_bigpts / spacing_bigpts * 2.5, 0.9)
 			return(patternGrob(
-				"pch",
+				"gridpattern::pch",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,
@@ -486,7 +490,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 		if (spec$special == "c_hex") {
 			col <- update_alpha(params$pattern_colour, params$pattern_alpha)
 			return(patternGrob(
-				"text",
+				"gridpattern::text",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,
@@ -500,7 +504,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 		if (spec$special == "checker") {
 			col <- update_alpha(params$pattern_colour, params$pattern_alpha)
 			return(patternGrob(
-				"polygon_tiling",
+				"gridpattern::polygon_tiling",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,
@@ -586,7 +590,7 @@ create_pattern_hatch <- function(params, boundary_df, aspect_ratio, legend = FAL
 			)
 			density <- params$pattern_linewidth * .pt / spacing_bigpts
 			return(patternGrob(
-				"wave",
+				"gridpattern::wave",
 				x = boundary_df$x,
 				y = boundary_df$y,
 				id = boundary_df$id,

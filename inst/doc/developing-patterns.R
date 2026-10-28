@@ -22,8 +22,21 @@ x,  y,  id
 knitr::kable(x, caption = "example data in 'polygon_df' format")
 
 ## ----eval = FALSE-------------------------------------------------------------
-# options(ggpattern_array_funcs    = list(your_pattern_name = your_pattern_function))
-# options(ggpattern_geometry_funcs = list(your_pattern_name = your_pattern_function))
+# register_pattern("your_pattern_name", your_geometry_pattern_function)
+# register_pattern("your_pattern_name", your_array_pattern_function, kind = "array")
+
+## ----eval = FALSE-------------------------------------------------------------
+# .onLoad <- function(libname, pkgname) {
+# 	rlang::on_package_load("gridpattern", {
+# 		if (exists("register_pattern", envir = asNamespace("gridpattern"), inherits = FALSE)) {
+# 			gridpattern::register_pattern("brick", create_pattern_brick)
+# 		} else {
+# 			funcs <- getOption("ggpattern_geometry_funcs", list())
+# 			funcs[["brick"]] <- create_pattern_brick
+# 			options(ggpattern_geometry_funcs = funcs)
+# 		}
+# 	})
+# }
 
 ## -----------------------------------------------------------------------------
 create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = FALSE) {
@@ -32,7 +45,7 @@ create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = F
     id <- boundary_df$id
 
     alpha <- ifelse(is.na(params$pattern_alpha), 1, params$pattern_alpha)
-    gp <- grid::gpar(alpha = alpha, 
+    gp <- grid::gpar(alpha = alpha,
                      col = params$pattern_colour,
                      fill = params$pattern_fill,
                      lty = params$pattern_linetype,
@@ -42,12 +55,12 @@ create_pattern_polygon <- function(params, boundary_df, aspect_ratio, legend = F
 }
 
 ## -----------------------------------------------------------------------------
-options(ggpattern_geometry_funcs = list(polygon = create_pattern_polygon))
+register_pattern("polygon", create_pattern_polygon)
 
 ## ----fig.alt = "Three rectangles each filled with a single color"-------------
-grid.pattern("polygon", fill = "red", size = 4, linetype = "dashed", 
+grid.pattern("polygon", fill = "red", size = 4, linetype = "dashed",
              x = c(0.05, 0.05, 0.305, 0.305), y = c(0.05, 0.305, 0.305, 0.05))
-grid.pattern("polygon", fill = "green", alpha = 0.2, 
+grid.pattern("polygon", fill = "green", alpha = 0.2,
              x = c(0.35, 0.35, 0.65, 0.65), y = c(0.35, 0.65, 0.65, 0.35))
 grid.pattern("polygon", fill = "blue", colour = "grey",
              x = c(0.7, 0.7, 1.0, 1.0), y = c(0.7, 1.0, 1.0, 0.7))
@@ -62,20 +75,20 @@ create_pattern_complex <- function(params, boundary_df, aspect_ratio, legend = F
     args$prefix <- ""
 
     args_stripe <- args
-    args_stripe$pattern <- "stripe"
+    args_stripe$pattern <- "gridpattern::stripe"
     args_stripe$pattern_density <- 0.5 * args$pattern_density
     args_stripe$pattern_spacing <- 2 * args$pattern_spacing
     grob_stripe <- do.call(gridpattern::patternGrob, args_stripe)
 
     args_circle <- args
-    args_circle$pattern <- "regular_polygon"
+    args_circle$pattern <- "gridpattern::regular_polygon"
     args_circle$pattern_shape <- c("circle", "null")
     args_circle$pattern_yoffset <- args$pattern_spacing + args$pattern_yoffset
     args_circle$pattern_type = "horizontal"
     grob_circle <- do.call(gridpattern::patternGrob, args_circle)
 
     args_gradient <- args
-    args_gradient$pattern <- "gradient"
+    args_gradient$pattern <- "gridpattern::gradient"
     args_gradient$pattern_fill <- "#00000070"
     args_gradient$pattern_fill2 <- "#FFFFFF70"
     args_gradient$pattern_orientation <- "vertical"
@@ -85,7 +98,7 @@ create_pattern_complex <- function(params, boundary_df, aspect_ratio, legend = F
 }
 
 ## -----------------------------------------------------------------------------
-options(ggpattern_geometry_funcs = list(complex = create_pattern_complex))
+register_pattern("complex", create_pattern_complex)
 
 ## ----fig.alt = "Three rectangles each with a 'stripe', 'circle', and 'gradient' pattern"----
 grid.pattern("complex", fill = "red", angle = 45, spacing = 0.05, density = 0.3,
@@ -95,19 +108,19 @@ grid.pattern("complex", fill = "green", angle = 45, spacing = 0.2, density = 0.2
 grid.pattern("complex", fill = "blue", angle = 45, spacing = 0.1, density = 0.3,
              x = c(0.7, 0.7, 1.0, 1.0), y = c(0.7, 1.0, 1.0, 0.7))
 grid::grid.polygon(x = c(0.0, 0.0, 0.3, 0.3, 0.35, 0.35, 0.65, 0.65, 0.7, 0.7, 1.0, 1.0),
-                   y = c(0.0, 0.3, 0.3, 0.0, 0.35, 0.65, 0.65, 0.35, 0.7, 1.0, 1.0, 0.7), 
-                   id = rep(1:3, each = 4), 
+                   y = c(0.0, 0.3, 0.3, 0.0, 0.35, 0.65, 0.65, 0.35, 0.7, 1.0, 1.0, 0.7),
+                   id = rep(1:3, each = 4),
                    gp = grid::gpar(col = "black", fill = NA, lwd=4))
 
 ## -----------------------------------------------------------------------------
 create_pattern_simple <- function(width, height, params, legend) {
-  
+
   # Ensure the selected pattern is sane.
   choice <- params$pattern_type
   if (is.null(choice) || is.na(choice) || !is.character(choice)) {
     choice <- 'a'
   }
-  
+
   # Choose the values with which to fill the array
   values <- switch(
     choice,
@@ -123,10 +136,10 @@ create_pattern_simple <- function(width, height, params, legend) {
 }
 
 ## -----------------------------------------------------------------------------
-options(ggpattern_array_funcs = list(simple = create_pattern_simple))
+register_pattern("simple", create_pattern_simple, kind = "array")
 
 ## ----fig.alt = "Three rectangles each filled with an 'array' pattern"---------
-grid::grid.polygon(x = c(0, 0, 1, 1), y = c(0, 1, 1, 0), 
+grid::grid.polygon(x = c(0, 0, 1, 1), y = c(0, 1, 1, 0),
                    gp = grid::gpar(col=NA, fill="grey"))
 grid.pattern("simple", type = "a",
              x = c(0.0, 0.0, 0.3, 0.3), y = c(0.0, 0.3, 0.3, 0.0))
